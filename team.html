@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Team Builder - Mochi-Mochi Krater (もちもち)</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <nav class="nav-bar">
+    <div class="nav-logo">MOCHI-MOCHI KRATER</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="team.html">Team Builder</a></li>
+      <li><a href="battle.html">Battle</a></li>
+      <li><a href="#" id="logoutBtn" class="hidden">Logout</a></li>
+    </ul>
+  </nav>
+
+  <div class="skyscraper-container">
+
+    <div class="main-tower" style="min-height: auto;">
+      <div class="tower-spire"></div>
+      <div class="tower-intro">Assemble your</div>
+      <h1 class="tower-title">BATTLE TEAM</h1>
+      <div class="tower-subtitle">Configure your squad</div>
+      <div class="tower-divider"></div>
+    </div>
+
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
+
+      <div class="floor">
+        <div class="floor-header">Team Selection</div>
+        <div style="margin-bottom: 15px; font-size: 13px; color: var(--text-secondary);">
+          Click monsters to add them to your team. Maximum 3 monsters.
+        </div>
+        <div class="filter-bar" id="typeFiltersTeam"></div>
+        <div class="search-bar">
+          <input type="text" id="searchInputTeam" class="search-input" placeholder="Search monsters...">
+        </div>
+        <div class="monster-grid" id="monsterGridTeam"></div>
+      </div>
+
+      <div>
+        <div class="floor">
+          <div class="floor-header">Your Squad</div>
+          <div style="display: flex; gap: 10px; margin-bottom: 15px;" id="teamSlots">
+            <div class="team-slot" data-index="0" style="flex: 1;">
+              <div style="color: var(--text-secondary); font-size: 12px;">SLOT 1</div>
+            </div>
+            <div class="team-slot" data-index="1" style="flex: 1;">
+              <div style="color: var(--text-secondary); font-size: 12px;">SLOT 2</div>
+            </div>
+            <div class="team-slot" data-index="2" style="flex: 1;">
+              <div style="color: var(--text-secondary); font-size: 12px;">SLOT 3</div>
+            </div>
+          </div>
+          <div style="text-align: center; margin-top: 20px;">
+            <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 10px;">Ready for battle?</p>
+            <select id="battleMode" style="padding: 10px; background: var(--building-primary); color: var(--text-primary); border: 1px solid var(--neon-blue); border-radius: 3px; font-family: 'Courier New', monospace; margin-bottom: 15px; cursor: pointer;">
+              <option value="1">1 vs 1</option>
+              <option value="2">2 vs 2</option>
+              <option value="3">3 vs 3</option>
+            </select>
+            <br>
+            <button id="startBattleBtn" class="skyscraper-btn primary">Enter Battle</button>
+          </div>
+        </div>
+
+        <div class="floor">
+          <div class="floor-header">Team Stats</div>
+          <div id="teamStats" style="font-size: 13px; color: var(--text-secondary);">
+            <p>Add monsters to see team summary.</p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <footer>
+      MOCHI-MOCHI KRATER (もちもち) | Build your team | Image assets: monstername.png
+    </footer>
+  </div>
+
+  <div id="monsterModal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999; display: flex; align-items: center; justify-content: center;">
+    <div class="viewer-panel" style="max-width: 700px; width: 90%; max-height: 90vh; overflow-y: auto;">
+      <button onclick="closeMonsterModal()" style="float: right; background: none; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer;">×</button>
+      <div class="viewer-content" id="monsterModalContent"></div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/monsters.js"></script>
+  <script src="js/moves.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>

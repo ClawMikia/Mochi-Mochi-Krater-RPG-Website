@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Battle Arena - Mochi-Mochi Krater (もちもち)</title>
+  <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+
+  <nav class="nav-bar">
+    <div class="nav-logo">MOCHI-MOCHI KRATER</div>
+    <ul class="nav-links">
+      <li><a href="index.html">Home</a></li>
+      <li><a href="team.html">Team Builder</a></li>
+      <li><a href="battle.html">Battle</a></li>
+      <li><a href="#" id="logoutBtn" class="hidden">Logout</a></li>
+    </ul>
+  </nav>
+
+  <div class="skyscraper-container">
+
+    <div id="battleSetup" class="main-tower" style="min-height: auto;">
+      <div class="tower-spire"></div>
+      <div class="tower-intro">Enter the</div>
+      <h1 class="tower-title">BATTLE ARENA</h1>
+      <div class="tower-subtitle">Configure your match</div>
+      <div class="tower-divider"></div>
+
+      <div class="building-block">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px;">
+          <div>
+            <label style="display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; letter-spacing: 2px; text-transform: uppercase;">Match Format</label>
+            <select id="battleModeSetup" style="width: 100%; padding: 12px; background: var(--building-secondary); color: var(--text-primary); border: 1px solid rgba(255,255,255,0.15); border-radius: 3px; font-family: 'Courier New', monospace; cursor: pointer;">
+              <option value="1">1 vs 1</option>
+              <option value="2">2 vs 2</option>
+              <option value="3">3 vs 3</option>
+            </select>
+          </div>
+          <div>
+            <label style="display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; letter-spacing: 2px; text-transform: uppercase;">Opponent</label>
+            <select id="opponentModeSetup" style="width: 100%; padding: 12px; background: var(--building-secondary); color: var(--text-primary); border: 1px solid rgba(255,255,255,0.15); border-radius: 3px; font-family: 'Courier New', monospace; cursor: pointer;">
+              <option value="cpu">CPU (Practice)</option>
+            </select>
+          </div>
+        </div>
+
+        <div id="cpuOptions" style="margin-top: 20px;">
+          <label style="display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; letter-spacing: 2px; text-transform: uppercase;">Difficulty</label>
+          <select id="cpuDifficulty" style="padding: 12px; background: var(--building-secondary); color: var(--text-primary); border: 1px solid rgba(255,255,255,0.15); border-radius: 3px; font-family: 'Courier New', monospace; cursor: pointer;">
+            <option value="easy">Cupcakes and Rainbows (Easy)</option>
+            <option value="medium" selected>Mochi-Mochi (Medium)</option>
+            <option value="hard">A.I. - No longer Artificial Intelligence but Absolutely Insane (Hard)</option>
+          </select>
+        </div>
+
+        <div style="text-align: center; margin-top: 30px;">
+          <button id="startMatchBtn" class="skyscraper-btn primary">Start Match</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="battleArea" class="hidden">
+
+      <div class="battle-arena">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+          <div style="font-size: 18px; font-weight: bold; color: var(--neon-blue); letter-spacing: 3px;">TURN <span id="turnCounter">1</span></div>
+          <div id="battleStatus" style="font-size: 14px; color: var(--text-secondary);">Your turn</div>
+        </div>
+
+        <div class="arena-floor">
+          <div class="battle-monster player1" id="player1Monster">
+            <img src="" alt="Player Monster" id="player1Image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div style="margin:auto; display:none; width:150px; height:150px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:4px; font-size:12px; color:var(--text-secondary);">Missing image</div> <br />
+            <div class="battle-name" id="player1Name">Player Monster</div>
+            <div class="hp-bar-container">
+              <div class="hp-bar" id="player1HpBar" style="width: 100%;"></div>
+            </div>
+            <div style="font-size: 11px; color: var(--text-secondary); margin-top: 3px;"><span id="player1HpText">100</span> / <span id="player1MaxHp">100</span> HP</div>
+          </div>
+
+          <div class="battle-monster player2" id="player2Monster">
+            <img src="" alt="Opponent Monster" id="player2Image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+            <div style="margin:auto; display:none; width:150px; height:150px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:4px; font-size:12px; color:var(--text-secondary);">Missing image</div> <br />
+            <div class="battle-name" id="player2Name">Opponent Monster</div>
+            <div class="hp-bar-container">
+              <div class="hp-bar" id="player2HpBar" style="width: 100%;"></div>
+            </div>
+            <div style="font-size: 11px; color: var(--text-secondary); margin-top: 3px;"><span id="player2HpText">100</span> / <span id="player2MaxHp">100</span> HP</div>
+          </div>
+        </div>
+
+        <div id="movePanel" class="action-panel">
+        </div>
+
+        <div class="action-panel">
+          <button class="move-btn" id="switchBtn">Switch Monster</button>
+          <button class="move-btn" id="fleeBtn">Flee</button>
+        </div>
+
+        <div class="battle-log scrollbar-custom" id="battleLog">
+          <div class="log-entry system">Battle start! Choose your move.</div>
+        </div>
+        </div>
+
+        <div id="monsterDetails" class="floor">
+          <div class="floor-header">Active Monster Details</div>
+          <div id="monsterDetailsContent" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div>
+              <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; letter-spacing: 2px; text-transform: uppercase;">Player Active</div>
+              <div id="playerMonsterInfo" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 3px; border-left: 3px solid var(--neon-blue);">
+                <div style="font-size: 16px; font-weight: bold; color: var(--text-primary); margin-bottom: 8px;" id="playerMonsterName">--</div>
+                <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 10px;" id="playerMonsterType">--</div>
+                <div class="detailed-stats" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px;">
+                  <div class="detailed-stat"><span class="stat-name">HP</span><span class="stat-value" id="playerMonsterHp">--</span></div>
+                  <div class="detailed-stat"><span class="stat-name">ATK</span><span class="stat-value" id="playerMonsterAtk">--</span></div>
+                  <div class="detailed-stat"><span class="stat-name">DEF</span><span class="stat-value" id="playerMonsterDef">--</span></div>
+                </div>
+                <div style="margin-top: 10px; font-size: 11px; color: var(--text-secondary);">Moves:</div>
+                <div id="playerMonsterMoves" style="font-size: 11px; color: var(--neon-blue); margin-top: 4px;">--</div>
+              </div>
+            </div>
+            <div>
+              <div style="font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; letter-spacing: 2px; text-transform: uppercase;">Opponent Active</div>
+              <div id="opponentMonsterInfo" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 3px; border-left: 3px solid var(--neon-orange);">
+                <div style="font-size: 16px; font-weight: bold; color: var(--text-primary); margin-bottom: 8px;" id="opponentMonsterName">--</div>
+                <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 10px;" id="opponentMonsterType">--</div>
+                <div class="detailed-stats" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px;">
+                  <div class="detailed-stat"><span class="stat-name">HP</span><span class="stat-value" id="opponentMonsterHp">--</span></div>
+                  <div class="detailed-stat"><span class="stat-name">ATK</span><span class="stat-value" id="opponentMonsterAtk">--</span></div>
+                  <div class="detailed-stat"><span class="stat-name">DEF</span><span class="stat-value" id="opponentMonsterDef">--</span></div>
+                </div>
+                <div style="margin-top: 10px; font-size: 11px; color: var(--text-secondary);">Moves:</div>
+                <div id="opponentMonsterMoves" style="font-size: 11px; color: var(--neon-orange); margin-top: 4px;">--</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      <div id="teamPanel" class="floor" style="display: none;">
+        <div class="floor-header">Switch Monster</div>
+        <div style="display: flex; gap: 15px;" id="switchOptions"></div>
+      </div>
+
+      <div id="matchResult" class="hidden" style="text-align: center; padding: 30px; margin-top: 20px;">
+        <div class="building-block" style="max-width: 600px; margin: 0 auto; text-align: center;">
+          <div id="resultIcon" style="font-size: 48px; margin-bottom: 15px;"></div>
+          <h2 id="resultTitle" style="font-size: 36px; margin-bottom: 10px; color: var(--text-primary); letter-spacing: 4px; text-transform: uppercase;"></h2>
+          <p id="resultMessage" style="font-size: 14px; color: var(--text-secondary); margin-bottom: 25px;"></p>
+          <div style="display: flex; gap: 15px; justify-content: center;">
+            <button onclick="location.reload()" class="skyscraper-btn primary">Play Again</button>
+            <button onclick="window.location.href='index.html'" class="skyscraper-btn secondary">Home</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <footer>
+      MOCHI-MOCHI KRATER (もちもち) | 1v1, 2v2, 3v3 battles | CPU mode
+    </footer>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
+  <script src="js/monsters.js"></script>
+  <script src="js/moves.js"></script>
+  <script src="js/game.js"></script>
+  <script src="js/supabase.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
