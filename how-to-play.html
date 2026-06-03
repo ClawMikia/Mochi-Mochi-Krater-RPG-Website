@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Mochi-Mochi Krater (もちもち) - Monster Battle Arena</title>
+  <title>How to Play - Mochi-Mochi Krater (もちもち)</title>
   <link rel="icon" type="image/png" href="assets/web_icon/icon.png">
   <link rel="stylesheet" href="css/styles.css">
 </head>
@@ -27,69 +27,65 @@
 
   <div class="skyscraper-container">
 
-    <div class="skyline" id="skyline"></div>
-
-    <div class="main-tower">
+    <div class="main-tower" style="min-height: auto;">
       <div class="tower-spire"></div>
-      <div class="tower-intro">Welcome to</div>
-      <h1 class="tower-title">MOCHI-MOCHI KRATER</h1>
-      <div class="tower-subtitle">(もちもち)</div>
+      <div class="tower-intro">Learn the basics of</div>
+      <h1 class="tower-title">HOW TO PLAY</h1>
+      <div class="tower-subtitle">Master the arena</div>
       <div class="tower-divider"></div>
-      <div class="tower-divider" style="width: 60%; margin: 10px auto 30px;"></div>
+    </div>
 
+    <div class="floor">
+      <div class="floor-header">1. Build Your Team</div>
       <div class="building-block">
-        <p style="text-align: center; font-size: 14px; color: var(--text-secondary); line-height: 1.8;">
-          Step into the neon-lit metropolis of battle!<br>
-          Assemble your squad of 200 bizarre monsters, each with unique stats and impossible charm.<br>
-          Challenge CPU or battle other players in 1v1, 2v2, or 3v3 matches.
+        <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.8;">
+          Head over to the <strong>Team Builder</strong> to assemble your squad. You can select up to 3 monsters. Each monster has different stats (HP, ATK, DEF) and types that determine their effectiveness.
         </p>
-      </div>
-
-      <div class="button-container">
-        <a href="team.html" class="skyscraper-btn primary">Team Builder</a>
-        <a href="battle.html" class="skyscraper-btn secondary">Battle Arena</a>
       </div>
     </div>
 
     <div class="floor">
-      <div class="floor-header">Monster Catalog</div>
-      <div class="filter-bar" id="typeFilters"></div>
-      <div class="search-bar">
-        <input type="text" id="searchInput" class="search-input" placeholder="Search monsters...">
+      <div class="floor-header">2. Enter the Battle</div>
+      <div class="building-block alt">
+        <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.8;">
+          Once your team is ready, go to the <strong>Battle Arena</strong>. Choose your match format (1v1, 2v2, or 3v3) and practice against the CPU with varying difficulty levels.
+        </p>
       </div>
-      <div class="monster-grid" id="monsterGrid"></div>
     </div>
 
     <div class="floor">
-      <div class="floor-header">About</div>
-      <div class="building-block">
-        <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.8;">
-          Mochi-Mochi Krater is a browser-based monster battle game inspired by classics like Pokemon Deluge and Pokemon Crater.
-          No traditional game elements here—just you, your team, and the arena. Gather 200 uniquely named monsters,
-          build your perfect team, and fight your way through CPU opponents or challenge online players.<br><br>
-          <strong style="color: var(--neon-pink);">Features:</strong><br>
-          • 200 comedy-named monsters with stats from 250-300<br>
-          • 1v1, 2v2, 3v3 battle formats<br>
-          • Player vs CPU & Player vs Player modes<br>
-          • Type-based effectiveness system<br>
-          • Supabase-powered online matchmaking
+      <div class="floor-header">3. Battle Mechanics</div>
+      <div class="building-block highlight">
+        <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.8;">
+          • <strong>Turns:</strong> Battles are turn-based. You and your opponent take turns attacking or switching.<br>
+          • <strong>Attacking:</strong> Select a move to deal damage. Damage depends on ATK, DEF, and type effectiveness.<br>
+          • <strong>Victory:</strong> The battle ends when all of an opponent's monsters have fainted.
         </p>
       </div>
+    </div>
+
+    <div class="floor">
+      <div class="floor-header">4. Type Effectiveness</div>
+      <div class="building-block">
+        <p style="font-size: 14px; color: var(--text-secondary); line-height: 1.8;">
+          Some types are <strong>Super Effective</strong> (2x damage), while some are <strong>Not Very Effective</strong> (0.5x damage).<br><br>
+          Examples:<br>
+          • <span style="color: var(--neon-pink);">Fire</span> is strong against <span style="color: var(--neon-blue);">Ice</span>.<br>
+          • <span style="color: var(--neon-blue);">Water</span> is strong against Fire.<br>
+          • <span style="color: var(--neon-green);">Electric</span> is strong against Water.
+        </p>
+      </div>
+    </div>
+
+    <div style="text-align: center; margin-top: 40px;">
+      <a href="team.html" class="skyscraper-btn primary">Ready? Build your team</a>
     </div>
 
     <footer>
-      MOCHI-MOCHI KRATER (もちもち) | All monsters © 2026 | Image assets: monstername.png
+      MOCHI-MOCHI KRATER (もちもち) | Master the neon-lit metropolis
     </footer>
   </div>
 
-  <div id="monsterModal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999; display: flex; align-items: center; justify-content: center;">
-    <div class="viewer-panel" style="max-width: 700px; width: 90%; max-height: 90vh; overflow-y: auto;">
-      <button onclick="closeMonsterModal()" style="float: right; background: none; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer;">×</button>
-      <div class="viewer-content" id="monsterModalContent"></div>
-    </div>
-  </div>
-
-  <!-- Include Supabase JS Client for Database, Auth, and Real-time sync -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
   <script src="js/monsters.js"></script>
   <script src="js/moves.js"></script>
