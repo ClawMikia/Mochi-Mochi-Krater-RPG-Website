@@ -761,38 +761,36 @@ function fleeBattle() {
 }
 
 function endBattle() {
-   isPlayerTurn = false;
-   document.querySelectorAll('.move-btn').forEach(function(btn) { btn.disabled = true; });
+    isPlayerTurn = false;
+    document.querySelectorAll('.move-btn').forEach(function(btn) { btn.disabled = true; });
 
-   const resultDiv = document.getElementById('matchResult');
-   const title = document.getElementById('resultTitle');
-   const message = document.getElementById('resultMessage');
-   const icon = document.getElementById('resultIcon');
+    const resultDiv = document.getElementById('matchResult');
+    const title = document.getElementById('resultTitle');
+    const message = document.getElementById('resultMessage');
+    const icon = document.getElementById('resultIcon');
 
-if (!resultDiv || !title || !message || !icon || !battleEngine) return;
-    if (battleEngine.winner === 'player1' || battleEngine.winner === 'player2') {
-      requestAnimationFrame(() => { resultDiv.classList.add('show'); });
-    }
+    if (!resultDiv || !title || !message || !icon || !battleEngine) return;
+    requestAnimationFrame(() => { resultDiv.classList.add('show'); });
 
     if (battleEngine.winner === 'player1') {
-     icon.textContent = '\u{1F3C6}';
-     title.style.color = 'var(--neon-green)';
-     title.textContent = 'Victory!';
-     message.textContent = 'You won the battle!';
-   } else if (battleEngine.winner === 'player2') {
-     icon.textContent = '\u{1F480}';
-     title.style.color = 'var(--neon-pink)';
-     title.textContent = 'Defeat';
-     message.textContent = 'You lost the battle.';
-   } else {
-     icon.textContent = '\u{1F91D}';
-     title.style.color = 'var(--neon-blue)';
-     title.textContent = 'Draw';
-     message.textContent = 'The battle ended in a draw!';
-   }
- }
- 
- function renderEngineLogs() {
+      icon.textContent = '\u{1F3C6}';
+      title.style.color = 'var(--neon-green)';
+      title.textContent = 'Victory!';
+      message.textContent = 'You won the battle!';
+    } else if (battleEngine.winner === 'player2' || battleEngine.winner === 'opponent') {
+      icon.textContent = '\u{1F480}';
+      title.style.color = 'var(--neon-pink)';
+      title.textContent = 'Defeat';
+      message.textContent = 'You lost the battle.';
+    } else {
+      icon.textContent = '\u{1F91D}';
+      title.style.color = 'var(--neon-blue)';
+      title.textContent = 'Draw';
+      message.textContent = 'The battle ended in a draw!';
+    }
+  }
+
+  function renderEngineLogs() {
    if (!battleEngine) return;
    const log = document.getElementById('battleLog');
    if (!log) return;

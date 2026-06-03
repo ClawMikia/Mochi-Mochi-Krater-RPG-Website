@@ -10,6 +10,7 @@
   --sky-gradient-bottom: #1a1a3e;
   --neon-pink: #ff2d95;
   --neon-blue: #00d4ff;
+  --neon-cyan: #00ffff;
   --neon-orange: #ff6b35;
   --neon-green: #39ff14;
   --text-primary: #e0e0ff;
@@ -850,8 +851,8 @@ body::before {
 .move-btn {
   padding: 12px 25px;
   background: var(--building-primary);
-  border: 2px solid var(--neon-blue);
-  color: var(--neon-blue);
+  border: 2px solid #fc1100;
+  color: #fc1100;
   font-family: 'Courier New', monospace;
   font-size: 14px;
   font-weight: bold;
@@ -871,7 +872,7 @@ body::before {
   left: -100%;
   width: 100%;
   height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent);
+  background: linear-gradient(90deg, transparent, rgba(252, 17, 0, 0.2), transparent);
   transition: left 0.5s ease;
 }
 
@@ -880,8 +881,8 @@ body::before {
 }
 
 .move-btn:hover {
-  background: rgba(0, 212, 255, 0.1);
-  box-shadow: 0 0 20px rgba(0, 212, 255, 0.4);
+  background: rgba(252, 17, 0, 0.1);
+  box-shadow: 0 0 20px rgba(252, 17, 0, 0.4);
   transform: translateY(-2px);
 }
 
