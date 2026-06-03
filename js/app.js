@@ -21,12 +21,22 @@ async function initApp() {
   const startMatchBtn = document.getElementById('startMatchBtn');
   const switchBtn = document.getElementById('switchBtn');
   const fleeBtn = document.getElementById('fleeBtn');
+  const hamburgerBtn = document.getElementById('hamburgerBtn');
+  const navLinks = document.getElementById('navLinks');
 
   if (startBattleBtn) startBattleBtn.addEventListener('click', startLocalBattle);
   if (selectCharacterBtn) selectCharacterBtn.addEventListener('click', showTeamSelectModal);
   if (startMatchBtn) startMatchBtn.addEventListener('click', startMatchSetup);
   if (switchBtn) switchBtn.addEventListener('click', showSwitchPanel);
   if (fleeBtn) fleeBtn.addEventListener('click', fleeBattle);
+  if (hamburgerBtn && navLinks) {
+    hamburgerBtn.addEventListener('click', () => {
+      navLinks.classList.toggle('active');
+      // Animate hamburger icon
+      const spans = hamburgerBtn.querySelectorAll('span');
+      spans.forEach(span => span.classList.toggle('active'));
+    });
+  }
 
   const battleModeSetup = document.getElementById('battleModeSetup');
   const cpuDifficultyEl = document.getElementById('cpuDifficulty');
