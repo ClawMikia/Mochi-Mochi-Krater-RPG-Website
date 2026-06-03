@@ -29,54 +29,37 @@
       <div class="tower-divider"></div>
     </div>
 
-    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px;">
-
-      <div class="floor">
-        <div class="floor-header">Team Selection</div>
-        <div style="margin-bottom: 15px; font-size: 13px; color: var(--text-secondary);">
-          Click monsters to add them to your team. Maximum 3 monsters.
+<div class="floor">
+      <div class="floor-header">Your Squad</div>
+      <button id="selectCharacterBtn" class="skyscraper-btn secondary" style="margin-bottom: 20px; display: block;">Select Character</button>
+      <div style="display: flex; gap: 10px; margin-bottom: 15px;" id="teamSlots">
+        <div class="team-slot" data-index="0" style="flex: 1;">
+          <div style="color: var(--text-secondary); font-size: 12px;">SLOT 1</div>
         </div>
-        <div class="filter-bar" id="typeFiltersTeam"></div>
-        <div class="search-bar">
-          <input type="text" id="searchInputTeam" class="search-input" placeholder="Search monsters...">
+        <div class="team-slot" data-index="1" style="flex: 1;">
+          <div style="color: var(--text-secondary); font-size: 12px;">SLOT 2</div>
         </div>
-        <div class="monster-grid" id="monsterGridTeam"></div>
-      </div>
-
-      <div>
-        <div class="floor">
-          <div class="floor-header">Your Squad</div>
-          <div style="display: flex; gap: 10px; margin-bottom: 15px;" id="teamSlots">
-            <div class="team-slot" data-index="0" style="flex: 1;">
-              <div style="color: var(--text-secondary); font-size: 12px;">SLOT 1</div>
-            </div>
-            <div class="team-slot" data-index="1" style="flex: 1;">
-              <div style="color: var(--text-secondary); font-size: 12px;">SLOT 2</div>
-            </div>
-            <div class="team-slot" data-index="2" style="flex: 1;">
-              <div style="color: var(--text-secondary); font-size: 12px;">SLOT 3</div>
-            </div>
-          </div>
-          <div style="text-align: center; margin-top: 20px;">
-            <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 10px;">Ready for battle?</p>
-            <select id="battleMode" style="padding: 10px; background: var(--building-primary); color: var(--text-primary); border: 1px solid var(--neon-blue); border-radius: 3px; font-family: 'Courier New', monospace; margin-bottom: 15px; cursor: pointer;">
-              <option value="1">1 vs 1</option>
-              <option value="2">2 vs 2</option>
-              <option value="3">3 vs 3</option>
-            </select>
-            <br>
-            <button id="startBattleBtn" class="skyscraper-btn primary">Enter Battle</button>
-          </div>
-        </div>
-
-        <div class="floor">
-          <div class="floor-header">Team Stats</div>
-          <div id="teamStats" style="font-size: 13px; color: var(--text-secondary);">
-            <p>Add monsters to see team summary.</p>
-          </div>
+        <div class="team-slot" data-index="2" style="flex: 1;">
+          <div style="color: var(--text-secondary); font-size: 12px;">SLOT 3</div>
         </div>
       </div>
+      <div style="text-align: center; margin-top: 20px;">
+        <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 10px;">Ready for battle?</p>
+        <select id="battleMode" style="padding: 10px; background: var(--building-primary); color: var(--text-primary); border: 1px solid var(--neon-blue); border-radius: 3px; font-family: 'Courier New', monospace; margin-bottom: 15px; cursor: pointer;">
+          <option value="1">1 vs 1</option>
+          <option value="2">2 vs 2</option>
+          <option value="3">3 vs 3</option>
+        </select>
+        <br>
+        <button id="startBattleBtn" class="skyscraper-btn primary">Enter Battle</button>
+      </div>
+    </div>
 
+    <div class="floor">
+      <div class="floor-header">Team Stats</div>
+      <div id="teamStats" style="font-size: 13px; color: var(--text-secondary);">
+        <p>Add monsters to see team summary.</p>
+      </div>
     </div>
 
     <footer>
@@ -84,10 +67,25 @@
     </footer>
   </div>
 
-  <div id="monsterModal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999; display: flex; align-items: center; justify-content: center;">
-    <div class="viewer-panel" style="max-width: 700px; width: 90%; max-height: 90vh; overflow-y: auto;">
-      <button onclick="closeMonsterModal()" style="float: right; background: none; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer;">×</button>
-      <div class="viewer-content" id="monsterModalContent"></div>
+  <div id="teamSelectModal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999; display: flex; align-items: center; justify-content: center;">
+    <div class="viewer-panel" style="max-width: 1200px; width: 90%; max-height: 90vh; overflow-y: auto; transform: translateY(-100vh); transition: transform 0.5s ease-out;">
+      <button onclick="closeTeamSelectModal()" style="float: right; background: none; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer;">×</button>
+      <div class="floor-header" style="margin-bottom: 20px;">Team Selection</div>
+      <div style="margin-bottom: 15px; font-size: 13px; color: var(--text-secondary);">
+        Click monsters to add them to your team. Maximum 3 monsters.
+      </div>
+      <div class="filter-bar" id="typeFiltersModal" style="max-height: 200px; overflow-y: auto;"></div>
+      <div class="search-bar">
+        <input type="text" id="searchInputModal" class="search-input" placeholder="Search monsters...">
+      </div>
+      <div class="monster-grid" id="monsterGridModal" style="max-height: 40vh; overflow-y: auto;"></div>
+      <div class="pagination-bar" id="paginationBar" style="margin-top: 20px; display: flex; justify-content: center; gap: 10px; align-items: center;">
+        <button id="firstPageBtn" class="filter-btn" style="padding: 6px 12px;">« First</button>
+        <button id="prevPageBtn" class="filter-btn" style="padding: 6px 12px;">‹ Prev</button>
+        <span id="pageInfo" style="color: var(--text-secondary); font-size: 13px; padding: 0 10px;">Page 1 of 1</span>
+        <button id="nextPageBtn" class="filter-btn" style="padding: 6px 12px;">Next ›</button>
+        <button id="lastPageBtn" class="filter-btn" style="padding: 6px 12px;">Last »</button>
+      </div>
     </div>
   </div>
 

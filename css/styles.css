@@ -29,11 +29,10 @@ html {
 
 body {
   font-family: 'Courier New', monospace;
-  background: linear-gradient(180deg, var(--sky-gradient-top) 0%, var(--sky-gradient-bottom) 100%);
+  background: url('../background/background.png') no-repeat center center fixed;
   color: var(--text-primary);
   min-height: 100vh;
   overflow-x: hidden;
-  background-attachment: fixed;
   background-size: cover;
 }
 
@@ -713,20 +712,15 @@ body::before {
 }
 
 .arena-floor {
-  background:
-    repeating-linear-gradient(
-      90deg,
-      rgba(255, 255, 255, 0.02) 0px,
-      rgba(255, 255, 255, 0.02) 50px,
-      transparent 50px,
-      transparent 100px
-    );
-  height: 400px;
-  position: relative;
-  margin-top: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  border-radius: 4px;
-  overflow: hidden;
+   background-image: url('../arena/arena.png');
+   background-size: cover;
+   background-position: center;
+   height: 400px;
+   position: relative;
+   margin-top: 20px;
+   border: 1px solid rgba(255, 255, 255, 0.05);
+   border-radius: 4px;
+   overflow: hidden;
 }
 
 .battle-monster {

@@ -1,5 +1,6 @@
 let selectedTeam = [];
 let activeFilter = 'all';
+let activeFilterModal = 'all';
 let isPlayerTurn = true;
 let battleEngine = null;
 let playerTeam = [];
@@ -8,16 +9,21 @@ let cpuDifficulty = 'medium';
 let battleMode = 1;
 let battleReady = false;
 let lastLogIndex = 0;
+let currentTeamPage = 1;
+let modalMonsterList = [];
+const MONSTERS_PER_PAGE = 12;
 
 document.addEventListener('DOMContentLoaded', initApp);
 
 async function initApp() {
   const startBattleBtn = document.getElementById('startBattleBtn');
+  const selectCharacterBtn = document.getElementById('selectCharacterBtn');
   const startMatchBtn = document.getElementById('startMatchBtn');
   const switchBtn = document.getElementById('switchBtn');
   const fleeBtn = document.getElementById('fleeBtn');
 
   if (startBattleBtn) startBattleBtn.addEventListener('click', startLocalBattle);
+  if (selectCharacterBtn) selectCharacterBtn.addEventListener('click', showTeamSelectModal);
   if (startMatchBtn) startMatchBtn.addEventListener('click', startMatchSetup);
   if (switchBtn) switchBtn.addEventListener('click', showSwitchPanel);
   if (fleeBtn) fleeBtn.addEventListener('click', fleeBattle);
@@ -40,7 +46,9 @@ async function initApp() {
   const searchInputTeam = document.getElementById('searchInputTeam');
   const typeFilters = document.getElementById('typeFilters');
   const typeFiltersTeam = document.getElementById('typeFiltersTeam');
+  const typeFiltersModal = document.getElementById('typeFiltersModal');
   const monsterModal = document.getElementById('monsterModal');
+  const teamSelectModal = document.getElementById('teamSelectModal');
 
   if (searchInput) searchInput.addEventListener('input', filterMonsters);
   if (searchInputTeam) searchInputTeam.addEventListener('input', filterMonstersTeam);
@@ -52,10 +60,12 @@ async function initApp() {
     initializeTypeFilters('typeFiltersTeam', 'team');
     displayMonstersTeam(MONSTER_DB);
   }
+  if (typeFiltersModal) {
+    initializeTypeFilters('typeFiltersModal', 'modal');
+    displayMonstersModal(MONSTER_DB, 1);
+  }
 
   generateSkyline();
-
-  const logoutBtn = document.getElementById('logoutBtn');
   const quickMatchBtn = document.getElementById('quickMatchBtn');
   if (quickMatchBtn) {
     quickMatchBtn.remove();
@@ -75,6 +85,11 @@ async function initApp() {
   if (monsterModal) {
     monsterModal.addEventListener('click', (e) => {
       if (e.target.id === 'monsterModal' && typeof closeMonsterModal === 'function') closeMonsterModal();
+    });
+  }
+  if (teamSelectModal) {
+    teamSelectModal.addEventListener('click', (e) => {
+      if (e.target.id === 'teamSelectModal' && typeof closeTeamSelectModal === 'function') closeTeamSelectModal();
     });
   }
 
@@ -145,8 +160,8 @@ function initializeTypeFilters(containerId, context) {
     btn.addEventListener('click', function() {
       container.querySelectorAll('.filter-btn').forEach(function(b) { b.classList.remove('active'); });
       btn.classList.add('active');
-      activeFilter = type;
-      if (context === 'main') filterMonsters(); else filterMonstersTeam();
+      if (context === 'modal') activeFilterModal = type; else activeFilter = type;
+      if (context === 'main') filterMonsters(); else if (context === 'team') filterMonstersTeam(); else filterMonstersModal();
     });
     container.appendChild(btn);
   });
@@ -201,6 +216,89 @@ function filterMonstersTeam() {
   displayMonstersTeam(filtered);
 }
 
+function showTeamSelectModal() {
+  const modal = document.getElementById('teamSelectModal');
+  const panel = modal.querySelector('.viewer-panel');
+  if (modal) {
+    modal.classList.remove('hidden');
+    panel.style.transform = 'translateY(-100vh)';
+    setTimeout(function() {
+      panel.style.transform = 'translateY(0)';
+    }, 10);
+  }
+}
+
+function closeTeamSelectModal() {
+  const modal = document.getElementById('teamSelectModal');
+  const panel = modal.querySelector('.viewer-panel');
+  if (modal) {
+    panel.style.transform = 'translateY(-100vh)';
+    setTimeout(function() {
+      modal.classList.add('hidden');
+    }, 500);
+  }
+}
+
+function displayMonstersModal(monsters, page) {
+  modalMonsterList = monsters;
+  const grid = document.getElementById('monsterGridModal');
+  const paginationBar = document.getElementById('paginationBar');
+  if (!grid) return;
+  
+  const startIndex = (page - 1) * MONSTERS_PER_PAGE;
+  const paginatedMonsters = monsters.slice(startIndex, startIndex + MONSTERS_PER_PAGE);
+  const totalPages = Math.ceil(monsters.length / MONSTERS_PER_PAGE) || 1;
+  
+  grid.innerHTML = '';
+  paginatedMonsters.forEach(function(m) {
+    const card = document.createElement('div');
+    card.className = 'monster-card';
+    card.style.opacity = (selectedTeam.length < 3 || selectedTeam.find(function(t) { return t.id === m.id; })) ? '1' : '0.4';
+    card.innerHTML = '<img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:120px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:2px; margin-bottom:10px; font-size:11px; color:var(--text-secondary);">' + m.name + '.png</div><div class="monster-name">' + m.name + '</div><div class="monster-type">' + m.type + '</div><div class="monster-stats"><div class="stat-bar"><span class="label">HP</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.hp - 250) / 15 * 100) + '%; background: var(--neon-blue);"></div></div><span class="value">' + m.hp + '</span></div><div class="stat-bar"><span class="label">ATK</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.atk - 250) / 15 * 100) + '%; background: var(--neon-pink);"></div></div><span class="value">' + m.atk + '</span></div><div class="stat-bar"><span class="label">DEF</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.def - 250) / 15 * 100) + '%; background: var(--neon-green);"></div></div><span class="value">' + m.def + '</span></div></div>';
+    card.addEventListener('click', function() { selectTeamMonster(m); });
+    grid.appendChild(card);
+  });
+  
+  if (paginationBar) {
+    const pageInfo = document.getElementById('pageInfo');
+    if (pageInfo) {
+      pageInfo.textContent = 'Page ' + page + ' of ' + totalPages;
+    }
+    const firstPageBtn = document.getElementById('firstPageBtn');
+    const prevPageBtn = document.getElementById('prevPageBtn');
+    const nextPageBtn = document.getElementById('nextPageBtn');
+    const lastPageBtn = document.getElementById('lastPageBtn');
+    
+    if (firstPageBtn) {
+      firstPageBtn.disabled = page === 1;
+      firstPageBtn.onclick = function() { if (page > 1) displayMonstersModal(monsters, 1); };
+    }
+    if (prevPageBtn) {
+      prevPageBtn.disabled = page === 1;
+      prevPageBtn.onclick = function() { if (page > 1) displayMonstersModal(monsters, page - 1); };
+    }
+    if (nextPageBtn) {
+      nextPageBtn.disabled = page === totalPages;
+      nextPageBtn.onclick = function() { if (page < totalPages) displayMonstersModal(monsters, page + 1); };
+    }
+    if (lastPageBtn) {
+      lastPageBtn.disabled = page === totalPages;
+      lastPageBtn.onclick = function() { if (page < totalPages) displayMonstersModal(monsters, totalPages); };
+    }
+  }
+}
+
+function filterMonstersModal() {
+  const searchInputModal = document.getElementById('searchInputModal');
+  if (!searchInputModal) return;
+  const search = searchInputModal.value.toLowerCase();
+  let filtered = MONSTER_DB;
+  if (activeFilterModal !== 'all') filtered = filtered.filter(function(m) { return m.type === activeFilterModal; });
+  if (search) filtered = filtered.filter(function(m) { return m.name.toLowerCase().indexOf(search) !== -1 || m.type.toLowerCase().indexOf(search) !== -1; });
+  currentTeamPage = 1;
+  displayMonstersModal(filtered, 1);
+}
+
 function selectTeamMonster(monster) {
   const existingIndex = selectedTeam.findIndex(function(t) { return t.id === monster.id; });
   if (existingIndex >= 0) {
@@ -213,6 +311,7 @@ function selectTeamMonster(monster) {
     selectedTeam.push(monster);
   }
   filterMonstersTeam();
+  refreshModalDisplay();
 }
 
 function updateTeamSlots() {
@@ -233,6 +332,31 @@ function updateTeamSlots() {
 function removeFromTeam(index) {
   selectedTeam.splice(index, 1);
   filterMonstersTeam();
+  refreshModalDisplay();
+}
+
+function refreshModalDisplay() {
+  const grid = document.getElementById('monsterGridModal');
+  if (!grid || !modalMonsterList.length) return;
+  
+  const startIndex = (currentTeamPage - 1) * MONSTERS_PER_PAGE;
+  const paginatedMonsters = modalMonsterList.slice(startIndex, startIndex + MONSTERS_PER_PAGE);
+  
+  grid.innerHTML = '';
+  paginatedMonsters.forEach(function(m) {
+    const card = document.createElement('div');
+    card.className = 'monster-card';
+    card.style.opacity = (selectedTeam.length < 3 || selectedTeam.find(function(t) { return t.id === m.id; })) ? '1' : '0.4';
+    card.innerHTML = '<img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:120px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:2px; margin-bottom:10px; font-size:11px; color:var(--text-secondary);">' + m.name + '.png</div><div class="monster-name">' + m.name + '</div><div class="monster-type">' + m.type + '</div><div class="monster-stats"><div class="stat-bar"><span class="label">HP</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.hp - 250) / 15 * 100) + '%; background: var(--neon-blue);"></div></div><span class="value">' + m.hp + '</span></div><div class="stat-bar"><span class="label">ATK</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.atk - 250) / 15 * 100) + '%; background: var(--neon-pink);"></div></div><span class="value">' + m.atk + '</span></div><div class="stat-bar"><span class="label">DEF</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.def - 250) / 15 * 100) + '%; background: var(--neon-green);"></div></div><span class="value">' + m.def + '</span></div></div>';
+    card.addEventListener('click', function() { selectTeamMonster(m); });
+    grid.appendChild(card);
+  });
+  
+  const pageInfo = document.getElementById('pageInfo');
+  if (pageInfo) {
+    const totalPages = Math.ceil(modalMonsterList.length / MONSTERS_PER_PAGE) || 1;
+    pageInfo.textContent = 'Page ' + currentTeamPage + ' of ' + totalPages;
+  }
 }
 
 function updateTeamStats() {
@@ -654,9 +778,8 @@ function updateMonsterDetails(p1, p2) {
   }
 }
 
+const searchInputModal = document.getElementById('searchInputModal');
+if (searchInputModal) searchInputModal.addEventListener('input', filterMonstersModal);
+
 window.closeMonsterModal = closeMonsterModal;
-
-
-
-
-
+window.closeTeamSelectModal = closeTeamSelectModal;
