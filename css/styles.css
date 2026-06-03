@@ -644,6 +644,9 @@ body::before {
   transition: color 0.3s;
   position: relative;
   padding: 5px 10px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .nav-links a::after {
