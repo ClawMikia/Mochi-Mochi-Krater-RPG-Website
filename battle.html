@@ -7,51 +7,47 @@
   <link rel="icon" type="image/png" href="assets/web_icon/icon.png">
   <link rel="stylesheet" href="css/styles.css">
 <style>
-   #matchResult {
-     position: fixed;
-     top: 0;
-     left: 0;
-     width: 100%;
-     height: 100%;
-     display: flex;
-     align-items: center;
-     justify-content: center;
-     background: rgba(0, 0, 0, 0.9);
-     opacity: 0;
-     pointer-events: none;
-     z-index: 1000;
-     margin: 0;
-   }
-   #matchResult.show {
-     opacity: 1;
-     pointer-events: auto;
-   }
-   #matchResult .building-block {
-     transform: translateY(-100vh);
-     transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-   }
-   #matchResult.show .building-block {
-     transform: translateY(0);
-   }
-   .action-panel.switch-flee {
-     position: relative;
-   }
-.action-panel.switch-flee .move-btn {
-      color: var(--neon-cyan) !important;
-      border-color: var(--neon-cyan) !important;
+    #matchResult {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: rgba(0, 0, 0, 0.9);
+      opacity: 0;
+      pointer-events: none;
+      z-index: 1000;
+      margin: 0;
     }
-    .action-panel.switch-flee .move-btn::before {
-      background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent) !important;
+    #matchResult.show {
+      opacity: 1;
+      pointer-events: auto;
     }
-    .action-panel.switch-flee .move-btn:hover {
-       background: rgba(0, 255, 255, 0.1) !important;
-       box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+    #matchResult .building-block {
+      transform: translateY(-100vh);
+      transition: transform 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+    #matchResult.show .building-block {
+      transform: translateY(0);
+    }
+    .action-panel.switch-flee {
+      position: relative;
+    }
+ .action-panel.switch-flee .move-btn {
+       color: var(--neon-cyan) !important;
+       border-color: var(--neon-cyan) !important;
      }
-     .battle-monster img {
-       width: 230px;
-       height: 230px;
+     .action-panel.switch-flee .move-btn::before {
+       background: linear-gradient(90deg, transparent, rgba(0, 255, 255, 0.2), transparent) !important;
      }
-   </style>
+     .action-panel.switch-flee .move-btn:hover {
+        background: rgba(0, 255, 255, 0.1) !important;
+        box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+      }
+</style>
 </head>
 <body>
 

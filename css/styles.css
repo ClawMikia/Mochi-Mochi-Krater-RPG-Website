@@ -18,6 +18,17 @@
   --glass: rgba(255, 255, 255, 0.05);
 }
 
+@media (max-width: 1200px) {
+  .skyscraper-container {
+    max-width: 100%;
+    padding: 15px;
+  }
+  
+  .main-tower {
+    max-width: 100%;
+  }
+}
+
 * {
   margin: 0;
   padding: 0;
@@ -549,6 +560,11 @@ body::before {
   grid-template-columns: 1fr 1fr;
   gap: 10px;
   margin-top: 20px;
+}
+
+.button-container {
+  text-align: center;
+  margin-top: 30px;
 }
 
 .detailed-stat {
@@ -1090,115 +1106,325 @@ footer {
 
 /* Hamburger Button Styles */
 .hamburger {
-   display: none;
-   flex-direction: column;
-   gap: 5px;
-   cursor: pointer;
- }
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+}
 
-  .hamburger span {
-   width: 25px;
-   height: 3px;
-   background: var(--neon-pink);
-   border-radius: 2px;
-   transition: all 0.3s ease;
- }
+.hamburger span {
+  width: 25px;
+  height: 3px;
+  background: var(--neon-pink);
+  border-radius: 2px;
+  transition: all 0.3s ease;
+}
 
-  .hamburger.active span:nth-child(1) {
-   transform: rotate(45deg) translate(5px, 5px);
- }
- 
-  .hamburger.active span:nth-child(2) {
-   opacity: 0;
- }
- 
-  .hamburger.active span:nth-child(3) {
-   transform: rotate(-45deg) translate(5px, -5px);
+.hamburger.active span:nth-child(1) {
+  transform: rotate(45deg) translate(5px, 5px);
+}
+
+.hamburger.active span:nth-child(2) {
+  opacity: 0;
+}
+
+.hamburger.active span:nth-child(3) {
+  transform: rotate(-45deg) translate(5px, -5px);
+}
+
+@media (max-width: 1024px) {
+  .skyscraper-container {
+    max-width: 100%;
+    padding: 15px;
   }
+  
+  .main-tower {
+    max-width: 100%;
+    padding: 30px;
+  }
+  
+  .tower-title {
+    font-size: 36px;
+    letter-spacing: 3px;
+  }
+  
+  .tower-subtitle {
+    font-size: 16px;
+    letter-spacing: 4px;
+  }
+  
+  .viewer-stats h2 {
+    font-size: 24px;
+  }
+}
 
 @media (max-width: 768px) {
-   .main-tower {
-     min-height: auto;
-     padding: 20px;
-   }
- 
-   .tower-title {
-     font-size: 32px;
-   }
- 
-   .monster-grid {
-     grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-     gap: 10px;
-   }
- 
-   .nav-bar {
-     position: relative;
-   }
- 
-   .nav-links {
-     display: none;
-     position: absolute;
-     top: 100%;
-     left: 0;
-     right: 0;
-     background: var(--building-primary);
-     flex-direction: column;
-     align-items: center;
-     gap: 10px;
-     padding: 15px 0;
-     border-top: 2px solid rgba(233, 69, 96, 0.3);
-     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
-   }
- 
-   .nav-links.active {
-     display: flex;
-   }
- 
-    .nav-links a {
-      width: 100%;
-      text-align: left;
-      padding: 14px 20px;
-      font-size: 16px;
-      gap: 10px;
-      display: flex;
-      align-items: center;
-    }
- 
-   .nav-links a::after {
-     display: none;
-   }
- 
-   .viewer-content {
-     flex-direction: column;
-   }
- 
-   .battle-arena {
-     padding: 15px;
-   }
- 
-   .arena-floor {
-     height: 300px;
-   }
- 
-   .battle-monster {
-     width: 140px;
-   }
- 
-    .battle-monster img {
-      width: 100px;
-      height: 100px;
-    }
+  .skyscraper-container {
+    padding: 10px;
+  }
+  
+  .main-tower {
+    min-height: auto;
+    padding: 15px;
+    margin: 0 auto 20px;
+  }
+  
+  .tower-title {
+    font-size: 28px;
+    letter-spacing: 2px;
+  }
+  
+  .tower-subtitle {
+    font-size: 14px;
+    letter-spacing: 3px;
+  }
+  
+  .tower-intro {
+    font-size: 12px;
+    letter-spacing: 2px;
+  }
+  
+  .tower-divider {
+    margin: 20px 0;
+  }
+  
+  .monster-grid {
+    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+    gap: 8px;
+  }
+  
+  .monster-card img {
+    height: 90px;
+  }
+  
+  .building-block {
+    padding: 15px;
+  }
+  
+  .floor {
+    padding: 15px;
+    margin: 10px 0;
+  }
+  
+  .floor-header {
+    font-size: 16px;
+    letter-spacing: 2px;
+  }
+  
+  .skyscraper-btn {
+    padding: 12px 25px;
+    font-size: 14px;
+    letter-spacing: 2px;
+  }
+  
+  .nav-bar {
+    position: relative;
+    padding: 12px 15px;
+  }
+  
+  .nav-logo {
+    font-size: 16px;
+    letter-spacing: 2px;
+  }
+  
+  .nav-icon {
+    width: 22px;
+    height: 22px;
+  }
+  
+  .nav-icon-svg {
+    width: 16px;
+    height: 16px;
+    margin-right: 6px;
+  }
+  
+  .nav-links {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: var(--building-primary);
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0;
+    border-top: 2px solid rgba(233, 69, 96, 0.3);
+    box-shadow: 0 5px 20px rgba(0, 0, 0, 0.5);
+  }
+  
+  .nav-links.active {
+    display: flex;
+  }
+  
+  .nav-links li {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+  }
+  
+  .nav-links a {
+    width: 100%;
+    text-align: left;
+    padding: 14px 20px;
+    font-size: 15px;
+    gap: 10px;
+    display: flex;
+    align-items: center;
+  }
+  
+  .nav-links a::after {
+    display: none;
+  }
+  
+  .hamburger {
+    display: flex;
+  }
+  
+  .viewer-content {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .viewer-image {
+    width: 200px;
+    height: 200px;
+  }
+  
+  .viewer-panel {
+    padding: 20px;
+    margin: 15px 0;
+  }
+  
+  .battle-arena {
+    padding: 15px;
+  }
+  
+  .arena-floor {
+    height: 250px;
+  }
+  
+  .battle-monster {
+    width: 120px;
+  }
+  
+  .battle-monster img {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .detailed-stats {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+}
 
-    .hamburger {
-       display: flex;
-     }
-   }
+@media (max-width: 480px) {
+  .skyscraper-container {
+    padding: 8px;
+  }
+  
+  .main-tower {
+    padding: 12px;
+    border-radius: 4px 4px 0 0;
+  }
+  
+  .tower-title {
+    font-size: 22px;
+    letter-spacing: 1px;
+  }
+  
+  .tower-subtitle {
+    font-size: 12px;
+    letter-spacing: 2px;
+  }
+  
+  .tower-intro {
+    font-size: 10px;
+    letter-spacing: 1px;
+  }
+  
+  .monster-grid {
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: 6px;
+  }
+  
+  .monster-card {
+    padding: 10px;
+  }
+  
+  .monster-card img {
+    height: 70px;
+  }
+  
+  .monster-name {
+    font-size: 11px;
+  }
+  
+  .monster-type {
+    font-size: 10px;
+  }
+  
+  .building-block {
+    padding: 12px;
+  }
+  
+  .building-block p {
+    font-size: 12px !important;
+    line-height: 1.6;
+  }
+  
+  .action-panel {
+    gap: 8px;
+  }
+  
+  .move-btn {
+    padding: 10px 15px;
+    font-size: 12px;
+  }
+}
 
-.nav-icon-svg {
-  width: 18px;
-  height: 18px;
-  flex-shrink: 0;
-  margin-right: 14px;
+@media (max-width: 420px) {
+  .button-container .skyscraper-btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+  
+  .button-container .skyscraper-btn.secondary {
+    margin-left: 0;
+    margin-top: 0;
+  }
+}
+
+@media (max-width: 360px) {
+  .tower-title {
+    font-size: 20px;
+  }
+  
+  .viewer-panel {
+    padding: 15px;
+  }
+  
+  .viewer-image {
+    width: 150px;
+    height: 150px;
+  }
+  
+  .arena-floor {
+    height: 200px;
+  }
+  
+  .battle-monster img {
+    width: 60px;
+    height: 60px;
+  }
+  
+  .button-row {
+    flex-direction: column;
+  }
+  
+[id="playerMonsterInfo"] .detailed-stats,
+  [id="opponentMonsterInfo"] .detailed-stats {
+    grid-template-columns: 1fr;
+  }
 }
 
 
