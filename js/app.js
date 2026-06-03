@@ -7,6 +7,10 @@ let playerTeam = [];
 let opponentTeam = [];
 let cpuDifficulty = 'medium';
 let battleMode = 1;
+let battleModeSetup = 1;
+const getMaxTeamSize = function() {
+  return document.getElementById('battleModeSetup') ? battleModeSetup : battleMode;
+};
 let battleReady = false;
 let lastLogIndex = 0;
 let currentTeamPage = 1;
@@ -26,24 +30,39 @@ async function initApp() {
 
   if (startBattleBtn) startBattleBtn.addEventListener('click', startLocalBattle);
   if (selectCharacterBtn) selectCharacterBtn.addEventListener('click', showTeamSelectModal);
+  const clearTeamBtn = document.getElementById('clearTeamBtn');
+  if (clearTeamBtn) clearTeamBtn.addEventListener('click', clearTeam);
   if (startMatchBtn) startMatchBtn.addEventListener('click', startMatchSetup);
   if (switchBtn) switchBtn.addEventListener('click', showSwitchPanel);
   if (fleeBtn) fleeBtn.addEventListener('click', fleeBattle);
   if (hamburgerBtn && navLinks) {
     hamburgerBtn.addEventListener('click', () => {
       navLinks.classList.toggle('active');
-      // Animate hamburger icon
       const spans = hamburgerBtn.querySelectorAll('span');
       spans.forEach(span => span.classList.toggle('active'));
     });
   }
 
-  const battleModeSetup = document.getElementById('battleModeSetup');
+  const battleModeSetupEl = document.getElementById('battleModeSetup');
   const cpuDifficultyEl = document.getElementById('cpuDifficulty');
+  const battleModeEl = document.getElementById('battleMode');
 
-  if (battleModeSetup) {
-    battleModeSetup.addEventListener('change', (e) => {
+  if (battleModeSetupEl) {
+    battleModeSetup = parseInt(battleModeSetupEl.value);
+    battleModeSetupEl.addEventListener('change', (e) => {
+      battleModeSetup = parseInt(e.target.value);
+      trimTeamToMax();
+      refreshTeamSlots();
+      if (typeof updateTeamStats === 'function') updateTeamStats();
+    });
+  }
+  if (battleModeEl) {
+    battleMode = parseInt(battleModeEl.value);
+    battleModeEl.addEventListener('change', (e) => {
       battleMode = parseInt(e.target.value);
+      trimTeamToMax();
+      refreshTeamSlots();
+      if (typeof updateTeamStats === 'function') updateTeamStats();
     });
   }
   if (cpuDifficultyEl) {
@@ -76,6 +95,7 @@ async function initApp() {
   }
 
   generateSkyline();
+  refreshTeamSlots();
   const quickMatchBtn = document.getElementById('quickMatchBtn');
   if (quickMatchBtn) {
     quickMatchBtn.remove();
@@ -194,10 +214,11 @@ function displayMonstersTeam(monsters) {
   const grid = document.getElementById('monsterGridTeam');
   if (!grid) return;
   grid.innerHTML = '';
+  const maxSlots = getMaxTeamSize ? getMaxTeamSize() : 3;
   monsters.forEach(function(m) {
     const card = document.createElement('div');
     card.className = 'monster-card';
-    card.style.opacity = (selectedTeam.length < 3 || selectedTeam.find(function(t) { return t.id === m.id; })) ? '1' : '0.4';
+    card.style.opacity = (selectedTeam.length < maxSlots || selectedTeam.find(function(t) { return t.id === m.id; })) ? '1' : '0.4';
     card.innerHTML = '<img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:120px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:2px; margin-bottom:10px; font-size:11px; color:var(--text-secondary);">' + m.name + '.png</div><div class="monster-name">' + m.name + '</div><div class="monster-type">' + m.type + '</div><div class="monster-stats"><div class="stat-bar"><span class="label">HP</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.hp - 250) / 15 * 100) + '%; background: var(--neon-blue);"></div></div><span class="value">' + m.hp + '</span></div><div class="stat-bar"><span class="label">ATK</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.atk - 250) / 15 * 100) + '%; background: var(--neon-pink);"></div></div><span class="value">' + m.atk + '</span></div><div class="stat-bar"><span class="label">DEF</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.def - 250) / 15 * 100) + '%; background: var(--neon-green);"></div></div><span class="value">' + m.def + '</span></div></div>';
     card.addEventListener('click', function() { selectTeamMonster(m); });
     grid.appendChild(card);
@@ -255,6 +276,7 @@ function displayMonstersModal(monsters, page) {
   const paginationBar = document.getElementById('paginationBar');
   if (!grid) return;
   
+  const maxSlots = getMaxTeamSize ? getMaxTeamSize() : 3;
   const startIndex = (page - 1) * MONSTERS_PER_PAGE;
   const paginatedMonsters = monsters.slice(startIndex, startIndex + MONSTERS_PER_PAGE);
   const totalPages = Math.ceil(monsters.length / MONSTERS_PER_PAGE) || 1;
@@ -263,7 +285,7 @@ function displayMonstersModal(monsters, page) {
   paginatedMonsters.forEach(function(m) {
     const card = document.createElement('div');
     card.className = 'monster-card';
-    card.style.opacity = (selectedTeam.length < 3 || selectedTeam.find(function(t) { return t.id === m.id; })) ? '1' : '0.4';
+    card.style.opacity = (selectedTeam.length < maxSlots || selectedTeam.find(function(t) { return t.id === m.id; })) ? '1' : '0.4';
     card.innerHTML = '<img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:120px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:2px; margin-bottom:10px; font-size:11px; color:var(--text-secondary);">' + m.name + '.png</div><div class="monster-name">' + m.name + '</div><div class="monster-type">' + m.type + '</div><div class="monster-stats"><div class="stat-bar"><span class="label">HP</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.hp - 250) / 15 * 100) + '%; background: var(--neon-blue);"></div></div><span class="value">' + m.hp + '</span></div><div class="stat-bar"><span class="label">ATK</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.atk - 250) / 15 * 100) + '%; background: var(--neon-pink);"></div></div><span class="value">' + m.atk + '</span></div><div class="stat-bar"><span class="label">DEF</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.def - 250) / 15 * 100) + '%; background: var(--neon-green);"></div></div><span class="value">' + m.def + '</span></div></div>';
     card.addEventListener('click', function() { selectTeamMonster(m); });
     grid.appendChild(card);
@@ -310,24 +332,36 @@ function filterMonstersModal() {
 }
 
 function selectTeamMonster(monster) {
-  const existingIndex = selectedTeam.findIndex(function(t) { return t.id === monster.id; });
+  const existingIndex = selectedTeam.findIndex(function(t) { return t && t.id === monster.id; });
   if (existingIndex >= 0) {
     selectedTeam.splice(existingIndex, 1);
   } else {
-    if (selectedTeam.length >= 3) {
+    const maxSlots = getMaxTeamSize ? getMaxTeamSize() : 3;
+    if (selectedTeam.length >= maxSlots) {
       showNotification('Your team is full! Remove a monster first.', 'error');
       return;
     }
     selectedTeam.push(monster);
+    if (selectedTeam.length === maxSlots) {
+      closeTeamSelectModal();
+    }
   }
-  filterMonstersTeam();
-  refreshModalDisplay();
+  if (typeof filterMonstersTeam === 'function') filterMonstersTeam();
+  if (typeof refreshModalDisplay === 'function') refreshModalDisplay();
+  if (typeof updateTeamSlots === 'function') updateTeamSlots();
+  if (typeof updateTeamStats === 'function') updateTeamStats();
 }
 
 function updateTeamSlots() {
-  const slots = document.querySelectorAll('#teamSlots .team-slot');
-  if (!slots.length) return;
-  slots.forEach(function(slot, i) {
+  const container = document.getElementById('teamSlots');
+  if (!container) return;
+  const maxSlots = getMaxTeamSize ? getMaxTeamSize() : 3;
+  container.innerHTML = '';
+  for (let i = 0; i < maxSlots; i++) {
+    const slot = document.createElement('div');
+    slot.className = 'team-slot';
+    slot.dataset.index = i;
+    slot.style.flex = '1';
     const monster = selectedTeam[i];
     if (monster) {
       slot.classList.add('filled');
@@ -336,19 +370,55 @@ function updateTeamSlots() {
       slot.classList.remove('filled');
       slot.innerHTML = '<div style="color: var(--text-secondary); font-size: 12px;">SLOT ' + (i + 1) + '</div>';
     }
-  });
+    container.appendChild(slot);
+  }
+  updateSlotsHint();
 }
 
 function removeFromTeam(index) {
   selectedTeam.splice(index, 1);
-  filterMonstersTeam();
-  refreshModalDisplay();
+  if (typeof filterMonstersTeam === 'function') filterMonstersTeam();
+  if (typeof refreshModalDisplay === 'function') refreshModalDisplay();
+  if (typeof updateTeamSlots === 'function') updateTeamSlots();
+  if (typeof updateTeamStats === 'function') updateTeamStats();
+}
+
+function clearTeam() {
+  selectedTeam = [];
+  if (typeof filterMonstersTeam === 'function') filterMonstersTeam();
+  if (typeof refreshModalDisplay === 'function') refreshModalDisplay();
+  if (typeof updateTeamSlots === 'function') updateTeamSlots();
+  if (typeof updateTeamStats === 'function') updateTeamStats();
+}
+
+function trimTeamToMax() {
+  const max = getMaxTeamSize ? getMaxTeamSize() : 3;
+  if (selectedTeam.length > max) {
+    selectedTeam = selectedTeam.slice(0, max);
+    if (typeof filterMonstersTeam === 'function') filterMonstersTeam();
+    if (typeof refreshModalDisplay === 'function') refreshModalDisplay();
+  }
+  if (typeof updateTeamSlots === 'function') updateTeamSlots();
+  if (typeof updateTeamStats === 'function') updateTeamStats();
+}
+
+function refreshTeamSlots() {
+  if (typeof updateTeamSlots === 'function') updateTeamSlots();
+  if (typeof updateTeamStats === 'function') updateTeamStats();
+}
+
+function updateSlotsHint() {
+  const hint = document.getElementById('slotHint');
+  if (!hint) return;
+  var maxSlots = getMaxTeamSize ? getMaxTeamSize() : 3;
+  hint.textContent = 'Slots based on ' + maxSlots + 'v' + maxSlots + ' format';
 }
 
 function refreshModalDisplay() {
   const grid = document.getElementById('monsterGridModal');
   if (!grid || !modalMonsterList.length) return;
   
+  const maxSlots = getMaxTeamSize ? getMaxTeamSize() : 3;
   const startIndex = (currentTeamPage - 1) * MONSTERS_PER_PAGE;
   const paginatedMonsters = modalMonsterList.slice(startIndex, startIndex + MONSTERS_PER_PAGE);
   
@@ -356,7 +426,7 @@ function refreshModalDisplay() {
   paginatedMonsters.forEach(function(m) {
     const card = document.createElement('div');
     card.className = 'monster-card';
-    card.style.opacity = (selectedTeam.length < 3 || selectedTeam.find(function(t) { return t.id === m.id; })) ? '1' : '0.4';
+    card.style.opacity = (selectedTeam.length < maxSlots || selectedTeam.find(function(t) { return t.id === m.id; })) ? '1' : '0.4';
     card.innerHTML = '<img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:120px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:2px; margin-bottom:10px; font-size:11px; color:var(--text-secondary);">' + m.name + '.png</div><div class="monster-name">' + m.name + '</div><div class="monster-type">' + m.type + '</div><div class="monster-stats"><div class="stat-bar"><span class="label">HP</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.hp - 250) / 15 * 100) + '%; background: var(--neon-blue);"></div></div><span class="value">' + m.hp + '</span></div><div class="stat-bar"><span class="label">ATK</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.atk - 250) / 15 * 100) + '%; background: var(--neon-pink);"></div></div><span class="value">' + m.atk + '</span></div><div class="stat-bar"><span class="label">DEF</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.def - 250) / 15 * 100) + '%; background: var(--neon-green);"></div></div><span class="value">' + m.def + '</span></div></div>';
     card.addEventListener('click', function() { selectTeamMonster(m); });
     grid.appendChild(card);
@@ -376,13 +446,14 @@ function updateTeamStats() {
     statsDiv.innerHTML = '<p>Add monsters to see team summary.</p>';
     return;
   }
+  const maxSlots = getMaxTeamSize ? getMaxTeamSize() : 3;
   const totalHp = selectedTeam.reduce(function(sum, m) { return sum + m.hp; }, 0);
   const totalAtk = selectedTeam.reduce(function(sum, m) { return sum + m.atk; }, 0);
   const totalDef = selectedTeam.reduce(function(sum, m) { return sum + m.def; }, 0);
   const avgHp = Math.round(totalHp / selectedTeam.length);
   const avgAtk = Math.round(totalAtk / selectedTeam.length);
   const avgDef = Math.round(totalDef / selectedTeam.length);
-  statsDiv.innerHTML = '<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; text-align: center;"><div class="detailed-stat" style="display: block;"><div class="stat-name">Total HP</div><div class="stat-value" style="color: var(--neon-blue);">' + totalHp + '</div></div><div class="detailed-stat" style="display: block;"><div class="stat-name">Total ATK</div><div class="stat-value" style="color: var(--neon-pink);">' + totalAtk + '</div></div><div class="detailed-stat" style="display: block;"><div class="stat-name">Total DEF</div><div class="stat-value" style="color: var(--neon-orange);">' + totalDef + '</div></div><div class="detailed-stat" style="display: block;"><div class="stat-name">Avg HP</div><div class="stat-value">' + avgHp + '</div></div><div class="detailed-stat" style="display: block;"><div class="stat-name">Avg ATK</div><div class="stat-value">' + avgAtk + '</div></div><div class="detailed-stat" style="display: block;"><div class="stat-name">Avg DEF</div><div class="stat-value">' + avgDef + '</div></div></div><div style="margin-top: 15px; text-align: center; color: var(--neon-green); font-size: 12px; letter-spacing: 2px;">' + selectedTeam.length + ' / 3 monsters selected</div>';
+  statsDiv.innerHTML = '<div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; text-align: center;"><div class="detailed-stat" style="display: block;"><div class="stat-name">Total HP</div><div class="stat-value" style="color: var(--neon-blue);">' + totalHp + '</div></div><div class="detailed-stat" style="display: block;"><div class="stat-name">Total ATK</div><div class="stat-value" style="color: var(--neon-pink);">' + totalAtk + '</div></div><div class="detailed-stat" style="display: block;"><div class="stat-name">Total DEF</div><div class="stat-value" style="color: var(--neon-orange);">' + totalDef + '</div></div><div class="detailed-stat" style="display: block;"><div class="stat-name">Avg HP</div><div class="stat-value">' + avgHp + '</div></div><div class="detailed-stat" style="display: block;"><div class="stat-name">Avg ATK</div><div class="stat-value">' + avgAtk + '</div></div><div class="detailed-stat" style="display: block;"><div class="stat-name">Avg DEF</div><div class="stat-value">' + avgDef + '</div></div></div><div style="margin-top: 15px; text-align: center; color: var(--neon-green); font-size: 12px; letter-spacing: 2px;">' + selectedTeam.length + ' / ' + maxSlots + ' monsters selected</div>';
 }
 
 function showMonsterModal(monster) {
@@ -410,25 +481,25 @@ function startLocalBattle() {
  }
 
 async function startMatchSetup() {
-   const battleModeSetup = document.getElementById('battleModeSetup');
-   const cpuDifficultyEl = document.getElementById('cpuDifficulty');
+    const cpuDifficultyEl = document.getElementById('cpuDifficulty');
+    const storedMode = sessionStorage.getItem('battleMode');
+    if (storedMode) battleMode = parseInt(storedMode);
+    else {
+      const el = document.getElementById('battleModeSetup');
+      battleMode = el ? parseInt(el.value) : 1;
+    }
+    if (cpuDifficultyEl) cpuDifficulty = cpuDifficultyEl.value;
+    else cpuDifficulty = 'medium';
 
-   const storedMode = sessionStorage.getItem('battleMode');
+    sessionStorage.setItem('battleMode', String(battleMode));
 
-   if (storedMode) battleMode = parseInt(storedMode);
-   else if (battleModeSetup) battleMode = parseInt(battleModeSetup.value);
-   else battleMode = 1;
-
-   if (cpuDifficultyEl) cpuDifficulty = cpuDifficultyEl.value;
-   else cpuDifficulty = 'medium';
-
-   sessionStorage.removeItem('battleMode');
-
-   if (!sessionStorage.getItem('playerTeam')) {
-     await initPlayerTeam();
-   }
-   await initiateOnlineBattle();
- }
+    if (typeof selectedTeam !== 'undefined' && selectedTeam.length > 0) {
+      sessionStorage.setItem('playerTeam', JSON.stringify(selectedTeam));
+    } else if (!sessionStorage.getItem('playerTeam')) {
+      await initPlayerTeam();
+    }
+    await initiateOnlineBattle();
+  }
 
 async function initPlayerTeam() {
   const randomMonsters = [];
@@ -469,6 +540,9 @@ function initiateBattle(playerMonsters, mode) {
   }
 
 async function initiateOnlineBattle() {
+    if (typeof selectedTeam !== 'undefined' && selectedTeam.length > 0) {
+      sessionStorage.setItem('playerTeam', JSON.stringify(selectedTeam));
+    }
     const stored = sessionStorage.getItem('playerTeam');
     const playerTeamData = stored ? JSON.parse(stored) : [];
     playerTeam = playerTeamData.map(function(m, i) {
@@ -582,6 +656,9 @@ function updateMonsterImages() {
   const player2Image = document.getElementById('player2Image');
 
   if (p1 && player1Image) {
+    player1Image.style.display = 'block';
+    const fallback1 = player1Image.nextElementSibling;
+    if (fallback1) fallback1.style.display = 'none';
     player1Image.src = 'assets/characters/' + p1.name + '.png';
     player1Image.onerror = function() {
       this.style.display = 'none';
@@ -590,6 +667,9 @@ function updateMonsterImages() {
     };
   }
   if (p2 && player2Image) {
+    player2Image.style.display = 'block';
+    const fallback2 = player2Image.nextElementSibling;
+    if (fallback2) fallback2.style.display = 'none';
     player2Image.src = 'assets/characters/' + p2.name + '.png';
     player2Image.onerror = function() {
       this.style.display = 'none';
@@ -624,19 +704,20 @@ function showSwitchPanel() {
     btn.className = 'monster-card';
     btn.style.cssText = 'flex: 0 0 120px; cursor: pointer;';
     btn.innerHTML = '<img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:60px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:2px; font-size:9px; color:var(--text-secondary);">' + m.name + '.png</div><div class="monster-name" style="font-size: 11px;">' + m.name + '</div><div style="font-size: 10px; color: var(--text-secondary);">HP: ' + m.currentHp + '</div>';
-btn.addEventListener('click', function() {
-       battleEngine.switchMonster(playerTeam, m.index);
-       renderEngineLogs();
-       updateBattleUI();
-       updateMonsterImages();
-       panel.style.display = 'none';
-       isPlayerTurn = false;
-       const battleStatus = document.getElementById('battleStatus');
-       if (battleStatus) battleStatus.textContent = 'Opponent turn...';
-       setTimeout(cpuExecuteTurn, 1200);
-     });
+    btn.addEventListener('click', function() {
+      battleEngine.switchMonster(playerTeam, m.index);
+      renderEngineLogs();
+      updateBattleUI();
+      updateMonsterImages();
+      panel.style.display = 'none';
+      isPlayerTurn = false;
+      const battleStatus = document.getElementById('battleStatus');
+      if (battleStatus) battleStatus.textContent = 'Opponent turn...';
+      setTimeout(cpuExecuteTurn, 1200);
+    });
     container.appendChild(btn);
   });
+  if (typeof updateTeamSlots === 'function') updateTeamSlots();
 }
 
 function executeTurn(selectedMove) {
@@ -688,10 +769,12 @@ function endBattle() {
    const message = document.getElementById('resultMessage');
    const icon = document.getElementById('resultIcon');
 
-   if (!resultDiv || !title || !message || !icon || !battleEngine) return;
-   resultDiv.classList.remove('hidden');
+if (!resultDiv || !title || !message || !icon || !battleEngine) return;
+    if (battleEngine.winner === 'player1' || battleEngine.winner === 'player2') {
+      requestAnimationFrame(() => { resultDiv.classList.add('show'); });
+    }
 
-   if (battleEngine.winner === 'player1') {
+    if (battleEngine.winner === 'player1') {
      icon.textContent = '\u{1F3C6}';
      title.style.color = 'var(--neon-green)';
      title.textContent = 'Victory!';

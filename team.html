@@ -9,20 +9,20 @@
 </head>
 <body>
 
-   <nav class="nav-bar">
-     <div class="nav-logo">MOCHI-MOCHI KRATER</div>
-     <div class="hamburger" id="hamburgerBtn">
-       <span></span>
-       <span></span>
-       <span></span>
-     </div>
-     <ul class="nav-links" id="navLinks">
-       <li><a href="index.html">Home</a></li>
-       <li><a href="team.html">Team Builder</a></li>
-       <li><a href="battle.html">Battle</a></li>
-       <li><a href="#" id="logoutBtn" class="hidden">Logout</a></li>
-     </ul>
-   </nav>
+    <nav class="nav-bar">
+      <div class="nav-logo"><img src="assets/web_icon/icon.png" alt="Icon" class="nav-icon">MOCHI-MOCHI KRATER (もちもち)</div>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="index.html"><svg class="nav-icon-svg" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>Home</a></li>
+        <li><a href="team.html"><svg class="nav-icon-svg" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>Team Builder</a></li>
+        <li><a href="battle.html"><svg class="nav-icon-svg" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>Battle</a></li>
+        <li><a href="#" id="logoutBtn" class="hidden"><svg class="nav-icon-svg" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>Logout</a></li>
+      </ul>
+      <div class="hamburger" id="hamburgerBtn">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
 
   <div class="skyscraper-container">
 
@@ -36,18 +36,12 @@
 
 <div class="floor">
       <div class="floor-header">Your Squad</div>
-      <button id="selectCharacterBtn" class="skyscraper-btn secondary" style="margin-bottom: 20px; display: block;">Select Character</button>
-      <div style="display: flex; gap: 10px; margin-bottom: 15px;" id="teamSlots">
-        <div class="team-slot" data-index="0" style="flex: 1;">
-          <div style="color: var(--text-secondary); font-size: 12px;">SLOT 1</div>
-        </div>
-        <div class="team-slot" data-index="1" style="flex: 1;">
-          <div style="color: var(--text-secondary); font-size: 12px;">SLOT 2</div>
-        </div>
-        <div class="team-slot" data-index="2" style="flex: 1;">
-          <div style="color: var(--text-secondary); font-size: 12px;">SLOT 3</div>
-        </div>
+      <div style="display: flex; gap: 10px; margin-bottom: 20px;">
+        <button id="selectCharacterBtn" class="skyscraper-btn secondary">Select Character</button>
+        <button id="clearTeamBtn" class="skyscraper-btn secondary">Clear Slots</button>
       </div>
+      <div style="display: flex; gap: 10px; margin-bottom: 15px;" id="teamSlots"></div>
+      <div id="slotHint" style="text-align: center; font-size: 12px; color: var(--text-secondary); margin-bottom: 10px;"></div>
       <div style="text-align: center; margin-top: 20px;">
         <p style="font-size: 12px; color: var(--text-secondary); margin-bottom: 10px;">Ready for battle?</p>
         <select id="battleMode" style="padding: 10px; background: var(--building-primary); color: var(--text-primary); border: 1px solid var(--neon-blue); border-radius: 3px; font-family: 'Courier New', monospace; margin-bottom: 15px; cursor: pointer;">
@@ -73,12 +67,12 @@
   </div>
 
   <div id="teamSelectModal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999; display: flex; align-items: center; justify-content: center;">
-    <div class="viewer-panel" style="max-width: 1200px; width: 90%; max-height: 90vh; overflow-y: auto; transform: translateY(-100vh); transition: transform 0.5s ease-out;">
-      <button onclick="closeTeamSelectModal()" style="float: right; background: none; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer;">×</button>
-      <div class="floor-header" style="margin-bottom: 20px;">Team Selection</div>
-      <div style="margin-bottom: 15px; font-size: 13px; color: var(--text-secondary);">
-        Click monsters to add them to your team. Maximum 3 monsters.
-      </div>
+      <div class="viewer-panel" style="max-width: 1200px; width: 90%; max-height: 90vh; overflow-y: auto; transform: translateY(-100vh); transition: transform 0.5s ease-out;">
+        <button onclick="closeTeamSelectModal()" style="float: right; background: none; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer;">×</button>
+        <div class="floor-header" style="margin-bottom: 20px;">Team Selection</div>
+        <div style="margin-bottom: 15px; font-size: 13px; color: var(--text-secondary);" id="maxMonsterHint">
+          Click monsters to add them to your team.
+        </div>
       <div class="filter-bar" id="typeFiltersModal" style="max-height: 200px; overflow-y: auto;"></div>
       <div class="search-bar">
         <input type="text" id="searchInputModal" class="search-input" placeholder="Search monsters...">
