@@ -210,19 +210,10 @@ function getMovesForMonster(monster) {
     { name: 'Sumo', type: 'Normal', power: 55 },
     { name: 'Echo-Echo', type: 'Normal', power: 65 }
   ];
-  const typedPool = MOVES.filter(m => m.type === monster.type);
-  const pool = [...typedPool];
-  const selected = []; 
-  const count = Math.min(6, pool.length + normalPool.length);
-  for (let i = 0; i < Math.min(count, pool.length); i++) {
-    const idx = Math.floor(Math.random() * pool.length);
-    selected.push(pool.splice(idx, 1)[0]);
-  }
-  while (selected.length < 6) {
-    const idx = Math.floor(Math.random() * normalPool.length);
-    selected.push(normalPool[idx]);
-  }
-  return selected;
+  const typedMoves = MOVES.filter(m => m.type === monster.type);
+  const pool = [...typedMoves, ...normalPool];
+  const shuffled = pool.sort(() => Math.random() - 0.5);
+  return shuffled.slice(0, 6);
 }
 
 
