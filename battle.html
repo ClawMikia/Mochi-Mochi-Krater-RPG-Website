@@ -58,13 +58,12 @@
        <span></span>
        <span></span>
      </div>
-     <ul class="nav-links" id="navLinks">
-       <li><a href="index.html"><svg class="nav-icon-svg" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>Home</a></li>
-       <li><a href="team.html"><svg class="nav-icon-svg" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M22 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>Team Builder</a></li>
-       <li><a href="how-to-play.html"><svg class="nav-icon-svg" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>How to Play</a></li>
-       <li><a href="battle.html"><svg class="nav-icon-svg" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>Battle</a></li>
-       <li><a href="#" id="logoutBtn" class="hidden"><svg class="nav-icon-svg" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>Logout</a></li>
-     </ul>
+<ul class="nav-links" id="navLinks">
+        <li><a href="index.html"><svg class="nav-icon-svg" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path><polyline points="9 22 9 12 15 12 15 22"></polyline></svg>Home</a></li>
+        <li><a href="how-to-play.html"><svg class="nav-icon-svg" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>How to Play</a></li>
+        <li><a href="battle.html"><svg class="nav-icon-svg" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>Battle</a></li>
+        <li><a href="#" id="logoutBtn" class="hidden"><svg class="nav-icon-svg" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>Logout</a></li>
+      </ul>
    </nav>
 
   <div class="skyscraper-container">
@@ -81,9 +80,9 @@
           <div>
             <label style="display: block; font-size: 13px; color: var(--text-secondary); margin-bottom: 8px; letter-spacing: 2px; text-transform: uppercase;">Match Format</label>
             <select id="battleModeSetup" style="width: 100%; padding: 12px; background: var(--building-secondary); color: var(--text-primary); border: 1px solid rgba(255,255,255,0.15); border-radius: 3px; font-family: 'Courier New', monospace; cursor: pointer;">
-              <option value="1">1 vs 1</option>
-              <option value="2">2 vs 2</option>
-              <option value="3">3 vs 3</option>
+              <option value="1">1 Monster</option>
+              <option value="2">2 Monsters</option>
+              <option value="3">3 Monsters</option>
             </select>
           </div>
           <div>
@@ -105,8 +104,19 @@
 
         <div style="text-align: center; margin-top: 30px;">
           <button id="selectCharacterBtn" class="skyscraper-btn secondary" style="margin-bottom: 15px; display: block; margin-left: auto; margin-right: auto;">Select Character</button>
-          <button id="startMatchBtn" class="skyscraper-btn primary">Start Match</button>
+          <button id="clearTeamBtn" class="skyscraper-btn secondary" style="margin-bottom: 15px; display: block; margin-left: auto; margin-right: auto;">Clear Slots</button>
+          <button id="startMatchBtn" class="skyscraper-btn primary" style="margin-bottom: 15px; display: block; margin-left: auto; margin-right: auto;">Start Match</button>
         </div>
+
+        <div id="teamSlots" style="display: flex; gap: 10px; margin-bottom: 15px;"></div>
+        <div id="slotHint" style="text-align: center; font-size: 12px; color: var(--text-secondary); margin-bottom: 10px;"></div>
+
+        <div id="teamStats" style="font-size: 13px; color: var(--text-secondary);">
+          <p>Add monsters to see team summary.</p>
+        </div>
+
+        <div style="margin-top: 20px;"></div>
+
       </div>
     </div>
 
@@ -119,8 +129,8 @@
 
          <div class="arena-floor">
            <div class="battle-monster player1" id="player1Monster">
-             <img src="" alt="Player Monster" id="player1Image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-             <div style="margin:auto; display:none; width:150px; height:150px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:4px; font-size:12px; color:var(--text-secondary);">Missing image</div> <br />
+<img src="" alt="Player Monster" id="player1Image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+              <div style="margin:auto; display:none; width:150px; height:150px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:4px; font-size:12px; color:var(--text-secondary);">To be born soon</div> <br />
              <div class="battle-name" id="player1Name">Player Monster</div>
              <div class="hp-bar-container">
                <div class="hp-bar" id="player1HpBar" style="width: 100%;"></div>
@@ -129,8 +139,8 @@
            </div>
 
            <div class="battle-monster player2" id="player2Monster">
-             <img src="" alt="Opponent Monster" id="player2Image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
-             <div style="margin:auto; display:none; width:150px; height:150px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:4px; font-size:12px; color:var(--text-secondary);">Missing image</div> <br />
+<img src="" alt="Opponent Monster" id="player2Image" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+              <div style="margin:auto; display:none; width:150px; height:150px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:4px; font-size:12px; color:var(--text-secondary);">To be born soon</div> <br />
              <div class="battle-name" id="player2Name">Opponent Monster</div>
              <div class="hp-bar-container">
                <div class="hp-bar" id="player2HpBar" style="width: 100%;"></div>
@@ -228,9 +238,9 @@
       </div>
     </div>
 
-    <footer>
-      MOCHI-MOCHI KRATER (もちもち) | 1v1, 2v2, 3v3 battles | CPU mode
-    </footer>
+<footer>
+       MOCHI-MOCHI KRATER (もちもち) | CPU Battle Mode
+     </footer>
   </div>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>

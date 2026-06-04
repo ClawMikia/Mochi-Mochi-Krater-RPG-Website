@@ -120,12 +120,12 @@ class BattleEngine {
       const nextMonster = this.getActiveMonster(defenderTeam);
       if (!nextMonster) {
         this.gameOver = true;
-        this.winner = attackerTeam === this.team1 ? 'player1' : 'player2';
-        this.log.push({
-          turn: this.turn,
-          message: `${this.winner === 'player1' ? 'Player 1' : 'Player 2'} wins!`,
-          type: 'system'
-        });
+this.winner = attackerTeam === this.team1 ? 'player' : 'cpu';
+       this.log.push({
+         turn: this.turn,
+         message: `${this.winner === 'player' ? 'Player' : 'CPU'} wins!`,
+         type: 'system'
+       });
       } else if (nextMonster.id !== defender.id) {
         if (attackerTeam === this.team1) {
           this.opponent = nextMonster;
@@ -163,7 +163,7 @@ class BattleEngine {
 
     this.log.push({
       turn: this.turn,
-      message: `${team === this.team1 ? 'Player 1' : 'Player 2'} switched to ${newMonster.name}!`,
+      message: `${team === this.team1 ? 'Player' : 'CPU'} switched to ${newMonster.name}!`,
       type: 'system'
     });
     this.turn++;
