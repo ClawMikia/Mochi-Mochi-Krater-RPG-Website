@@ -540,6 +540,8 @@ body::before {
   color: var(--text-primary);
   letter-spacing: 3px;
   text-transform: uppercase;
+  word-break: break-word;
+  hyphens: auto;
 }
 
 .viewer-stats .type-badge {

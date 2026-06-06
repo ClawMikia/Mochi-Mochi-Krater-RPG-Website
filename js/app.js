@@ -472,12 +472,25 @@ function updateTeamStats() {
 function showMonsterModal(monster) {
   document.getElementById('monsterModalContent').innerHTML = '<div class="viewer-image"><img src="assets/characters/' + monster.name + '.png" alt="' + monster.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:100%; align-items:center; justify-content:center; font-size:14px; color:var(--text-secondary);">To be born soon</div></div><div class="viewer-stats"><h2>' + monster.name + '</h2><div class="type-badge">' + monster.type + '</div><div class="detailed-stats"><div class="detailed-stat"><span class="stat-name">HP</span><span class="stat-value">' + monster.hp + '</span></div><div class="detailed-stat"><span class="stat-name">ATK</span><span class="stat-value">' + monster.atk + '</span></div><div class="detailed-stat"><span class="stat-name">DEF</span><span class="stat-value">' + monster.def + '</span></div><div class="detailed-stat"><span class="stat-name">Total</span><span class="stat-value">' + (monster.hp + monster.atk + monster.def) + '</span></div></div></div>';
   const modal = document.getElementById('monsterModal');
-  if (modal) modal.classList.remove('hidden');
+  if (modal) {
+    modal.classList.remove('hidden');
+    modal.classList.add('show');
+  }
 }
 
 function closeMonsterModal() {
   const modal = document.getElementById('monsterModal');
-  if (modal) modal.classList.add('hidden');
+  const panel = modal ? modal.querySelector('.viewer-panel') : null;
+  if (panel) {
+    panel.style.animation = 'none';
+    panel.offsetHeight;
+    panel.style.transform = '';
+    panel.style.opacity = '';
+  }
+  if (modal) {
+    modal.classList.remove('show');
+    modal.classList.add('hidden');
+  }
 }
 
 function startLocalBattle() {

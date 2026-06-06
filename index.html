@@ -39,7 +39,7 @@
       <div class="building-block">
 <p style="text-align: center; font-size: 14px; color: var(--text-secondary); line-height: 1.8;">
            Step into the neon-lit metropolis of battle!<br>
-           Assemble your squad of 200 bizarre monsters, each with unique stats and impossible charm.<br>
+           Assemble your squad of 238 bizarre monsters, each with unique stats and impossible charm.<br>
            Challenge CPU opponents in battle matches.
          </p>
       </div>
@@ -63,7 +63,7 @@
       <div class="building-block">
 <p style="font-size: 13px; color: var(--text-secondary); line-height: 1.8;">
            Mochi-Mochi Krater is a browser-based monster battle game inspired by classics like Pokemon Deluge and Pokemon Crater.
-           No traditional game elements here—just you, your team, and the arena. Gather 200 uniquely named monsters,
+           No traditional game elements here—just you, your team, and the arena. Gather 238 uniquely named monsters,
            build your perfect team, and fight your way through CPU opponents.<br><br>
 <strong style="color: var(--neon-pink);">Features:</strong><br>
             • 200 comedy-named monsters with stats from 250-300<br>
@@ -79,12 +79,63 @@
     </footer>
   </div>
 
-  <div id="monsterModal" class="hidden" style="position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.9); z-index: 999; display: flex; align-items: center; justify-content: center;">
-    <div class="viewer-panel" style="max-width: 700px; width: 90%; max-height: 90vh; overflow-y: auto;">
-      <button onclick="closeMonsterModal()" style="float: right; background: none; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer;">×</button>
-      <div class="viewer-content" id="monsterModalContent"></div>
-    </div>
-  </div>
+<style>
+#monsterModal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.9);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease;
+}
+#monsterModal.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+#monsterModal.show {
+  display: flex !important;
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+#monsterModal .viewer-panel {
+  width: fit-content;
+  min-width: 300px;
+  max-width: 90vw;
+  max-height: 90vh;
+  overflow-y: auto;
+  margin: 0 auto;
+  transform: translateX(-100%);
+  opacity: 0;
+}
+#monsterModal.show .viewer-panel {
+  animation: slideInFromLeft 0.3s ease forwards;
+}
+@keyframes slideInFromLeft {
+  from {
+    transform: translateX(-100%);
+    opacity: 0;
+  }
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+</style>
+   <div id="monsterModal" class="hidden">
+     <div class="viewer-panel">
+       <button onclick="closeMonsterModal()" style="float: right; background: none; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer;">×</button>
+       <div class="viewer-content" id="monsterModalContent"></div>
+     </div>
+   </div>
 
   <!-- Include Supabase JS Client for Database, Auth, and Real-time sync -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js"></script>
