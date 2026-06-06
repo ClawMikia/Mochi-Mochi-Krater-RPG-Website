@@ -474,7 +474,14 @@ function showMonsterModal(monster) {
   const modal = document.getElementById('monsterModal');
   if (modal) {
     modal.classList.remove('hidden');
-    modal.classList.add('show');
+    var panel = modal.querySelector('.viewer-panel');
+    if (panel) {
+      panel.style.transform = 'translateX(-100%)';
+      panel.style.opacity = '0';
+    }
+    setTimeout(function() {
+      modal.classList.add('show');
+    }, 10);
   }
 }
 
@@ -482,8 +489,6 @@ function closeMonsterModal() {
   const modal = document.getElementById('monsterModal');
   const panel = modal ? modal.querySelector('.viewer-panel') : null;
   if (panel) {
-    panel.style.animation = 'none';
-    panel.offsetHeight;
     panel.style.transform = '';
     panel.style.opacity = '';
   }
