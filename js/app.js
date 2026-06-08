@@ -202,9 +202,10 @@ function displayMonsters(monsters) {
   if (!grid) return;
   grid.innerHTML = '';
   monsters.forEach(function(m) {
+    const spd = m.spd || 150;
     const card = document.createElement('div');
     card.className = 'monster-card';
-    card.innerHTML = '<img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:120px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:2px; margin-bottom:10px; font-size:11px; color:var(--text-secondary);">To be born soon</div><div class="monster-name">' + m.name + '</div><div class="monster-type">' + m.type + '</div><div class="monster-stats"><div class="stat-bar"><span class="label">HP</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.hp - 250) / 15 * 100) + '%; background: var(--neon-blue);"></div></div><span class="value">' + m.hp + '</span></div><div class="stat-bar"><span class="label">ATK</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.atk - 250) / 15 * 100) + '%; background: var(--neon-pink);"></div></div><span class="value">' + m.atk + '</span></div><div class="stat-bar"><span class="label">DEF</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.def - 250) / 15 * 100) + '%; background: var(--neon-green);"></div></div><span class="value">' + m.def + '</span></div></div>';
+    card.innerHTML = '<img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:120px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:2px; margin-bottom:10px; font-size:11px; color:var(--text-secondary);">To be born soon</div><div class="monster-name">' + m.name + '</div><div class="monster-type">' + m.type + '</div><div class="monster-stats"><div class="stat-bar"><span class="label">HP</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.hp - 250) / 15 * 100) + '%; background: var(--neon-blue);"></div></div><span class="value">' + m.hp + '</span></div><div class="stat-bar"><span class="label">ATK</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.atk - 250) / 15 * 100) + '%; background: var(--neon-pink);"></div></div><span class="value">' + m.atk + '</span></div><div class="stat-bar"><span class="label">DEF</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.def - 250) / 15 * 100) + '%; background: var(--neon-green);"></div></div><span class="value">' + m.def + '</span></div><div class="stat-bar"><span class="label">SPD</span><div class="bar-container"><div class="bar-fill" style="width:' + ((spd - 80) / 2.2 * 100) + '%; background: var(--neon-purple);"></div></div><span class="value">' + spd + '</span></div></div>';
     card.addEventListener('click', function() { showMonsterModal(m); });
     grid.appendChild(card);
   });
@@ -216,10 +217,11 @@ function displayMonstersTeam(monsters) {
   grid.innerHTML = '';
   const maxSlots = getMaxTeamSize ? getMaxTeamSize() : 3;
   monsters.forEach(function(m) {
+    const spd = m.spd || 150;
     const card = document.createElement('div');
     card.className = 'monster-card';
     card.style.opacity = (selectedTeam.length < maxSlots || selectedTeam.find(function(t) { return t.id === m.id; })) ? '1' : '0.4';
-    card.innerHTML = '<img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:120px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:2px; margin-bottom:10px; font-size:11px; color:var(--text-secondary);">To be born soon</div><div class="monster-name">' + m.name + '</div><div class="monster-type">' + m.type + '</div><div class="monster-stats"><div class="stat-bar"><span class="label">HP</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.hp - 250) / 15 * 100) + '%; background: var(--neon-blue);"></div></div><span class="value">' + m.hp + '</span></div><div class="stat-bar"><span class="label">ATK</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.atk - 250) / 15 * 100) + '%; background: var(--neon-pink);"></div></div><span class="value">' + m.atk + '</span></div><div class="stat-bar"><span class="label">DEF</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.def - 250) / 15 * 100) + '%; background: var(--neon-green);"></div></div><span class="value">' + m.def + '</span></div></div>';
+    card.innerHTML = '<img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:120px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:2px; margin-bottom:10px; font-size:11px; color:var(--text-secondary);">To be born soon</div><div class="monster-name">' + m.name + '</div><div class="monster-type">' + m.type + '</div><div class="monster-stats"><div class="stat-bar"><span class="label">HP</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.hp - 250) / 15 * 100) + '%; background: var(--neon-blue);"></div></div><span class="value">' + m.hp + '</span></div><div class="stat-bar"><span class="label">ATK</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.atk - 250) / 15 * 100) + '%; background: var(--neon-pink);"></div></div><span class="value">' + m.atk + '</span></div><div class="stat-bar"><span class="label">DEF</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.def - 250) / 15 * 100) + '%; background: var(--neon-green);"></div></div><span class="value">' + m.def + '</span></div><div class="stat-bar"><span class="label">SPD</span><div class="bar-container"><div class="bar-fill" style="width:' + ((spd - 80) / 2.2 * 100) + '%; background: var(--neon-purple);"></div></div><span class="value">' + spd + '</span></div></div>';
     card.addEventListener('click', function() { selectTeamMonster(m); });
     grid.appendChild(card);
   });
@@ -283,10 +285,11 @@ function displayMonstersModal(monsters, page) {
   
   grid.innerHTML = '';
   paginatedMonsters.forEach(function(m) {
+    const spd = m.spd || 150;
     const card = document.createElement('div');
     card.className = 'monster-card';
     card.style.opacity = (selectedTeam.length < maxSlots || selectedTeam.find(function(t) { return t.id === m.id; })) ? '1' : '0.4';
-    card.innerHTML = '<img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:120px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:2px; margin-bottom:10px; font-size:11px; color:var(--text-secondary);">To be born soon</div><div class="monster-name">' + m.name + '</div><div class="monster-type">' + m.type + '</div><div class="monster-stats"><div class="stat-bar"><span class="label">HP</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.hp - 250) / 15 * 100) + '%; background: var(--neon-blue);"></div></div><span class="value">' + m.hp + '</span></div><div class="stat-bar"><span class="label">ATK</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.atk - 250) / 15 * 100) + '%; background: var(--neon-pink);"></div></div><span class="value">' + m.atk + '</span></div><div class="stat-bar"><span class="label">DEF</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.def - 250) / 15 * 100) + '%; background: var(--neon-green);"></div></div><span class="value">' + m.def + '</span></div></div>';
+    card.innerHTML = '<img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:120px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:2px; margin-bottom:10px; font-size:11px; color:var(--text-secondary);">To be born soon</div><div class="monster-name">' + m.name + '</div><div class="monster-type">' + m.type + '</div><div class="monster-stats"><div class="stat-bar"><span class="label">HP</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.hp - 250) / 15 * 100) + '%; background: var(--neon-blue);"></div></div><span class="value">' + m.hp + '</span></div><div class="stat-bar"><span class="label">ATK</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.atk - 250) / 15 * 100) + '%; background: var(--neon-pink);"></div></div><span class="value">' + m.atk + '</span></div><div class="stat-bar"><span class="label">DEF</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.def - 250) / 15 * 100) + '%; background: var(--neon-green);"></div></div><span class="value">' + m.def + '</span></div><div class="stat-bar"><span class="label">SPD</span><div class="bar-container"><div class="bar-fill" style="width:' + ((spd - 80) / 2.2 * 100) + '%; background: var(--neon-purple);"></div></div><span class="value">' + spd + '</span></div></div>';
     card.addEventListener('click', function() { selectTeamMonster(m); });
     grid.appendChild(card);
   });
@@ -424,10 +427,11 @@ function refreshModalDisplay() {
   
   grid.innerHTML = '';
   paginatedMonsters.forEach(function(m) {
+    const spd = m.spd || 150;
     const card = document.createElement('div');
     card.className = 'monster-card';
     card.style.opacity = (selectedTeam.length < maxSlots || selectedTeam.find(function(t) { return t.id === m.id; })) ? '1' : '0.4';
-    card.innerHTML = '<img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:120px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:2px; margin-bottom:10px; font-size:11px; color:var(--text-secondary);">To be born soon</div><div class="monster-name">' + m.name + '</div><div class="monster-type">' + m.type + '</div><div class="monster-stats"><div class="stat-bar"><span class="label">HP</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.hp - 250) / 15 * 100) + '%; background: var(--neon-blue);"></div></div><span class="value">' + m.hp + '</span></div><div class="stat-bar"><span class="label">ATK</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.atk - 250) / 15 * 100) + '%; background: var(--neon-pink);"></div></div><span class="value">' + m.atk + '</span></div><div class="stat-bar"><span class="label">DEF</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.def - 250) / 15 * 100) + '%; background: var(--neon-green);"></div></div><span class="value">' + m.def + '</span></div></div>';
+    card.innerHTML = '<img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:120px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:2px; margin-bottom:10px; font-size:11px; color:var(--text-secondary);">To be born soon</div><div class="monster-name">' + m.name + '</div><div class="monster-type">' + m.type + '</div><div class="monster-stats"><div class="stat-bar"><span class="label">HP</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.hp - 250) / 15 * 100) + '%; background: var(--neon-blue);"></div></div><span class="value">' + m.hp + '</span></div><div class="stat-bar"><span class="label">ATK</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.atk - 250) / 15 * 100) + '%; background: var(--neon-pink);"></div></div><span class="value">' + m.atk + '</span></div><div class="stat-bar"><span class="label">DEF</span><div class="bar-container"><div class="bar-fill" style="width:' + ((m.def - 250) / 15 * 100) + '%; background: var(--neon-green);"></div></div><span class="value">' + m.def + '</span></div><div class="stat-bar"><span class="label">SPD</span><div class="bar-container"><div class="bar-fill" style="width:' + ((spd - 80) / 2.2 * 100) + '%; background: var(--neon-purple);"></div></div><span class="value">' + spd + '</span></div></div>';
     card.addEventListener('click', function() { selectTeamMonster(m); });
     grid.appendChild(card);
   });
@@ -450,27 +454,30 @@ function updateTeamStats() {
   const totalHp = selectedTeam.reduce(function(sum, m) { return sum + m.hp; }, 0);
   const totalAtk = selectedTeam.reduce(function(sum, m) { return sum + m.atk; }, 0);
   const totalDef = selectedTeam.reduce(function(sum, m) { return sum + m.def; }, 0);
+  const totalSpd = selectedTeam.reduce(function(sum, m) { return sum + (m.spd || 150); }, 0);
   const avgHp = Math.round(totalHp / selectedTeam.length);
   const avgAtk = Math.round(totalAtk / selectedTeam.length);
   const avgDef = Math.round(totalDef / selectedTeam.length);
+  const avgSpd = Math.round(totalSpd / selectedTeam.length);
   if (selectedTeam.length === 1) {
     const m = selectedTeam[0];
-    statsDiv.innerHTML = '<div class="team-stats-grid"><div class="team-stat-card"><div class="team-stat-name">HP</div><div class="team-stat-value" style="color: var(--neon-blue);">' + m.hp + '</div></div><div class="team-stat-card"><div class="team-stat-name">ATK</div><div class="team-stat-value" style="color: var(--neon-pink);">' + m.atk + '</div></div><div class="team-stat-card"><div class="team-stat-name">DEF</div><div class="team-stat-value" style="color: var(--neon-orange);">' + m.def + '</div></div><div class="team-stat-card"><div class="team-stat-name">Total</div><div class="team-stat-value">' + (m.hp + m.atk + m.def) + '</div></div></div><div class="team-stats-footer">' + selectedTeam.length + ' / ' + maxSlots + ' monsters selected</div>';
+    statsDiv.innerHTML = '<div class="team-stats-grid"><div class="team-stat-card"><div class="team-stat-name">HP</div><div class="team-stat-value" style="color: var(--neon-blue);">' + m.hp + '</div></div><div class="team-stat-card"><div class="team-stat-name">ATK</div><div class="team-stat-value" style="color: var(--neon-pink);">' + m.atk + '</div></div><div class="team-stat-card"><div class="team-stat-name">DEF</div><div class="team-stat-value" style="color: var(--neon-orange);">' + m.def + '</div></div><div class="team-stat-card"><div class="team-stat-name">SPD</div><div class="team-stat-value" style="color: var(--neon-purple);">' + (m.spd || 150) + '</div></div><div class="team-stat-card"><div class="team-stat-name">Total</div><div class="team-stat-value">' + (m.hp + m.atk + m.def + (m.spd || 150)) + '</div></div></div><div class="team-stats-footer">' + selectedTeam.length + ' / ' + maxSlots + ' monsters selected</div>';
   } else if (selectedTeam.length > 1) {
     let cardsHtml = '<div class="team-monsters-grid">';
     selectedTeam.forEach(function(m) {
-      const total = m.hp + m.atk + m.def;
-      cardsHtml += '<div class="team-monster-card"><div class="monster-card-header"><span class="monster-card-name">' + m.name + '</span><span class="monster-card-type">' + m.type + '</span></div><div class="monster-card-stats"><div class="monster-stat-row"><div class="monster-stat-label">HP</div><div class="monster-stat-value">' + m.hp + '</div></div><div class="monster-stat-row"><div class="monster-stat-label">ATK</div><div class="monster-stat-value">' + m.atk + '</div></div><div class="monster-stat-row"><div class="monster-stat-label">DEF</div><div class="monster-stat-value">' + m.def + '</div></div><div class="monster-stat-row monster-stat-total"><div class="monster-stat-label">Total</div><div class="monster-stat-value">' + total + '</div></div></div></div>';
+      const total = m.hp + m.atk + m.def + (m.spd || 150);
+      cardsHtml += '<div class="team-monster-card"><div class="monster-card-header"><span class="monster-card-name">' + m.name + '</span><span class="monster-card-type">' + m.type + '</span></div><div class="monster-card-stats"><div class="monster-stat-row"><div class="monster-stat-label">HP</div><div class="monster-stat-value">' + m.hp + '</div></div><div class="monster-stat-row"><div class="monster-stat-label">ATK</div><div class="monster-stat-value">' + m.atk + '</div></div><div class="monster-stat-row"><div class="monster-stat-label">DEF</div><div class="monster-stat-value">' + m.def + '</div></div><div class="monster-stat-row"><div class="monster-stat-label">SPD</div><div class="monster-stat-value" style="color: var(--neon-purple);">' + (m.spd || 150) + '</div></div><div class="monster-stat-row monster-stat-total"><div class="monster-stat-label">Total</div><div class="monster-stat-value">' + total + '</div></div></div></div>';
     });
     cardsHtml += '</div>';
     statsDiv.innerHTML = cardsHtml + '<div class="team-stats-footer">' + selectedTeam.length + ' / ' + maxSlots + ' monsters selected</div>';
   } else {
-    statsDiv.innerHTML = '<div class="team-stats-grid"><div class="team-stat-card"><div class="team-stat-name">Total HP</div><div class="team-stat-value" style="color: var(--neon-blue);">' + totalHp + '</div></div><div class="team-stat-card"><div class="team-stat-name">Total ATK</div><div class="team-stat-value" style="color: var(--neon-pink);">' + totalAtk + '</div></div><div class="team-stat-card"><div class="team-stat-name">Total DEF</div><div class="team-stat-value" style="color: var(--neon-orange);">' + totalDef + '</div></div><div class="team-stat-card"><div class="team-stat-name">Avg HP</div><div class="team-stat-value">' + avgHp + '</div></div><div class="team-stat-card"><div class="team-stat-name">Avg ATK</div><div class="team-stat-value">' + avgAtk + '</div></div><div class="team-stat-card"><div class="team-stat-name">Avg DEF</div><div class="team-stat-value">' + avgDef + '</div></div></div><div class="team-stats-footer">' + selectedTeam.length + ' / ' + maxSlots + ' monsters selected</div>';
+    statsDiv.innerHTML = '<div class="team-stats-grid"><div class="team-stat-card"><div class="team-stat-name">Total HP</div><div class="team-stat-value" style="color: var(--neon-blue);">' + totalHp + '</div></div><div class="team-stat-card"><div class="team-stat-name">Total ATK</div><div class="team-stat-value" style="color: var(--neon-pink);">' + totalAtk + '</div></div><div class="team-stat-card"><div class="team-stat-name">Total DEF</div><div class="team-stat-value" style="color: var(--neon-orange);">' + totalDef + '</div></div><div class="team-stat-card"><div class="team-stat-name">Total SPD</div><div class="team-stat-value" style="color: var(--neon-purple);">' + totalSpd + '</div></div><div class="team-stat-card"><div class="team-stat-name">Avg HP</div><div class="team-stat-value">' + avgHp + '</div></div><div class="team-stat-card"><div class="team-stat-name">Avg ATK</div><div class="team-stat-value">' + avgAtk + '</div></div><div class="team-stat-card"><div class="team-stat-name">Avg DEF</div><div class="team-stat-value">' + avgDef + '</div></div></div><div class="team-stats-footer">' + selectedTeam.length + ' / ' + maxSlots + ' monsters selected</div>';
   }
 }
 
 function showMonsterModal(monster) {
-  document.getElementById('monsterModalContent').innerHTML = '<div class="viewer-image"><img src="assets/characters/' + monster.name + '.png" alt="' + monster.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:100%; align-items:center; justify-content:center; font-size:14px; color:var(--text-secondary);">To be born soon</div></div><div class="viewer-stats"><h2>' + monster.name + '</h2><div class="type-badge">' + monster.type + '</div><div class="detailed-stats"><div class="detailed-stat"><span class="stat-name">HP</span><span class="stat-value">' + monster.hp + '</span></div><div class="detailed-stat"><span class="stat-name">ATK</span><span class="stat-value">' + monster.atk + '</span></div><div class="detailed-stat"><span class="stat-name">DEF</span><span class="stat-value">' + monster.def + '</span></div><div class="detailed-stat"><span class="stat-name">Total</span><span class="stat-value">' + (monster.hp + monster.atk + monster.def) + '</span></div></div></div>';
+  const spd = monster.spd || 150;
+  document.getElementById('monsterModalContent').innerHTML = '<div class="viewer-image"><img src="assets/characters/' + monster.name + '.png" alt="' + monster.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:100%; align-items:center; justify-content:center; font-size:14px; color:var(--text-secondary);">To be born soon</div></div><div class="viewer-stats"><h2>' + monster.name + '</h2><div class="type-badge">' + monster.type + '</div><div class="detailed-stats"><div class="detailed-stat"><span class="stat-name">HP</span><span class="stat-value">' + monster.hp + '</span></div><div class="detailed-stat"><span class="stat-name">ATK</span><span class="stat-value">' + monster.atk + '</span></div><div class="detailed-stat"><span class="stat-name">DEF</span><span class="stat-value">' + monster.def + '</span></div><div class="detailed-stat"><span class="stat-name">SPD</span><span class="stat-value">' + spd + '</span></div><div class="detailed-stat"><span class="stat-name">Total</span><span class="stat-value">' + (monster.hp + monster.atk + monster.def + spd) + '</span></div></div></div>';
   const modal = document.getElementById('monsterModal');
   if (modal) {
     modal.classList.remove('hidden');
@@ -586,28 +593,36 @@ async function initiateOnlineBattle() {
     startBattleEngine();
   }
 
- function startBattleEngine() {
-   const battleSetup = document.getElementById('battleSetup');
-   const battleArea = document.getElementById('battleArea');
-   if (battleSetup) battleSetup.classList.add('hidden');
-   if (battleArea) battleArea.classList.remove('hidden');
+function startBattleEngine() {
+    const battleSetup = document.getElementById('battleSetup');
+    const battleArea = document.getElementById('battleArea');
+    if (battleSetup) battleSetup.classList.add('hidden');
+    if (battleArea) battleArea.classList.remove('hidden');
 
-   battleEngine = new BattleEngine(JSON.parse(JSON.stringify(playerTeam)), JSON.parse(JSON.stringify(opponentTeam)));
-   playerTeam = battleEngine.team1;
-   opponentTeam = battleEngine.team2;
-   battleReady = true;
-   lastLogIndex = 0;
+    battleEngine = new BattleEngine(JSON.parse(JSON.stringify(playerTeam)), JSON.parse(JSON.stringify(opponentTeam)));
+    playerTeam = battleEngine.team1;
+    opponentTeam = battleEngine.team2;
+    battleReady = true;
+    lastLogIndex = 0;
+    battleEngine.determineTurnOrder();
 
-   renderMoveButtons();
-   updateBattleUI();
-   updateMonsterImages();
-   addLog('system', 'Battle start! Choose your move.');
-   isPlayerTurn = true;
-   const battleStatus = document.getElementById('battleStatus');
-   if (battleStatus) battleStatus.textContent = 'Your turn';
-   const teamPanel = document.getElementById('teamPanel');
-   if (teamPanel) teamPanel.style.display = 'none';
- }
+    renderMoveButtons();
+    updateBattleUI();
+    updateMonsterImages();
+    addLog('system', 'Battle start! Speed determines turn order.');
+    if (battleEngine.playerGoesFirst) {
+      isPlayerTurn = true;
+      const battleStatus = document.getElementById('battleStatus');
+      if (battleStatus) battleStatus.textContent = 'Your turn (speed advantage!)';
+    } else {
+      isPlayerTurn = false;
+      const battleStatus = document.getElementById('battleStatus');
+      if (battleStatus) battleStatus.textContent = 'Opponent is faster!';
+      setTimeout(cpuExecuteTurn, 1200);
+    }
+    const teamPanel = document.getElementById('teamPanel');
+    if (teamPanel) teamPanel.style.display = 'none';
+  }
 
 function renderMoveButtons() {
   const movePanel = document.getElementById('movePanel');
@@ -741,10 +756,18 @@ function showSwitchPanel() {
       updateBattleUI();
       updateMonsterImages();
       panel.style.display = 'none';
-      isPlayerTurn = false;
+      battleEngine.determineTurnOrder();
+      isPlayerTurn = battleEngine.playerGoesFirst;
       const battleStatus = document.getElementById('battleStatus');
-      if (battleStatus) battleStatus.textContent = 'Opponent turn...';
-      setTimeout(cpuExecuteTurn, 1200);
+      if (battleStatus) {
+        if (isPlayerTurn) {
+          battleStatus.textContent = 'Your turn (speed advantage!)';
+        } else {
+          battleStatus.textContent = 'Opponent is faster!';
+          setTimeout(cpuExecuteTurn, 1200);
+        }
+      }
+      updateBattleUI();
     });
     container.appendChild(btn);
   });
@@ -877,11 +900,14 @@ function updateMonsterDetails(p1, p2) {
     const a = document.getElementById('playerMonsterAtk');
     const d = document.getElementById('playerMonsterDef');
     const mv = document.getElementById('playerMonsterMoves');
+    const spd = document.getElementById('playerMonsterSpd');
     if (n) n.textContent = p1.name;
     if (t) t.textContent = p1.type;
     if (h) h.textContent = p1.currentHp + ' / ' + p1.hp;
     if (a) a.textContent = p1.atk;
     if (d) d.textContent = p1.def;
+    if (spd) spd.textContent = p1.spd || 150;
+    if (spd) spd.style.color = 'var(--neon-purple)';
     if (mv && p1.moves) mv.textContent = p1.moves.map(function(m){return m.name;}).join(', ');
   }
   if (p2) {
@@ -891,11 +917,14 @@ function updateMonsterDetails(p1, p2) {
     const a = document.getElementById('opponentMonsterAtk');
     const d = document.getElementById('opponentMonsterDef');
     const mv = document.getElementById('opponentMonsterMoves');
+    const spd = document.getElementById('opponentMonsterSpd');
     if (n) n.textContent = p2.name;
     if (t) t.textContent = p2.type;
     if (h) h.textContent = p2.currentHp + ' / ' + p2.hp;
     if (a) a.textContent = p2.atk;
     if (d) d.textContent = p2.def;
+    if (spd) spd.textContent = p2.spd || 150;
+    if (spd) spd.style.color = 'var(--neon-purple)';
     if (mv && p2.moves) mv.textContent = p2.moves.map(function(m){return m.name;}).join(', ');
   }
 }

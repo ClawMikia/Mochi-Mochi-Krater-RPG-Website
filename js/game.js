@@ -10,6 +10,13 @@ class BattleEngine {
     this.winner = null;
   }
 
+  determineTurnOrder() {
+    if (!this.currentMonster || !this.opponent) return;
+    const playerSpeed = this.currentMonster.spd || 150;
+    const opponentSpeed = this.opponent.spd || 150;
+    this.playerGoesFirst = playerSpeed >= opponentSpeed;
+  }
+
   getActiveMonster(team) {
     return team.find(m => m.alive) || null;
   }
@@ -142,6 +149,7 @@ this.winner = attackerTeam === this.team1 ? 'player' : 'cpu';
             type: 'system'
           });
         }
+        this.determineTurnOrder();
       }
     }
 
@@ -166,6 +174,7 @@ this.winner = attackerTeam === this.team1 ? 'player' : 'cpu';
       message: `${team === this.team1 ? 'Player' : 'CPU'} switched to ${newMonster.name}!`,
       type: 'system'
     });
+    this.determineTurnOrder();
     this.turn++;
     return true;
   }
@@ -179,7 +188,8 @@ this.winner = attackerTeam === this.team1 ? 'player' : 'cpu';
       log: this.log,
       turn: this.turn,
       gameOver: this.gameOver,
-      winner: this.winner
+      winner: this.winner,
+      playerGoesFirst: this.playerGoesFirst
     };
   }
 

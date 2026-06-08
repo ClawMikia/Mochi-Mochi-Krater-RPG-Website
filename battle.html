@@ -168,12 +168,12 @@
     .monster-card-stats .monster-stat-row:nth-child(3) .monster-stat-value {
       color: var(--neon-orange);
     }
-    .monster-card-stats .monster-stat-row:nth-child(4) .monster-stat-label {
-      border-left: 3px solid var(--neon-green);
-    }
-    .monster-card-stats .monster-stat-row:nth-child(4) .monster-stat-value {
-      color: var(--neon-green);
-    }
+.monster-card-stats .monster-stat-row:nth-child(4) .monster-stat-label {
+       border-left: 3px solid var(--neon-purple);
+     }
+     .monster-card-stats .monster-stat-row:nth-child(4) .monster-stat-value {
+       color: var(--neon-purple);
+     }
     .team-stats-footer {
       text-align: center;
       color: var(--neon-green);
@@ -305,11 +305,12 @@
              <div id="playerMonsterInfo" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 3px; border-left: 3px solid var(--neon-blue);">
                <div style="font-size: 16px; font-weight: bold; color: var(--text-primary); margin-bottom: 8px;" id="playerMonsterName">--</div>
                <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 10px;" id="playerMonsterType">--</div>
-               <div class="detailed-stats" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px;">
-                 <div class="detailed-stat"><span class="stat-name">HP</span><span class="stat-value" id="playerMonsterHp">--</span></div>
-                 <div class="detailed-stat"><span class="stat-name">ATK</span><span class="stat-value" id="playerMonsterAtk">--</span></div>
-                 <div class="detailed-stat"><span class="stat-name">DEF</span><span class="stat-value" id="playerMonsterDef">--</span></div>
-               </div>
+<div class="detailed-stats" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-top: 10px;">
+                   <div class="detailed-stat"><span class="stat-name">HP</span><span class="stat-value" id="playerMonsterHp" style="color: var(--neon-blue);">--</span></div>
+                   <div class="detailed-stat"><span class="stat-name">ATK</span><span class="stat-value" id="playerMonsterAtk" style="color: var(--neon-pink);">--</span></div>
+                   <div class="detailed-stat"><span class="stat-name">DEF</span><span class="stat-value" id="playerMonsterDef" style="color: var(--neon-orange);">--</span></div>
+                   <div class="detailed-stat"><span class="stat-name">SPD</span><span class="stat-value" id="playerMonsterSpd" style="color: var(--neon-purple);">--</span></div>
+                 </div>
                <div style="margin-top: 10px; font-size: 11px; color: var(--text-secondary);">Moves:</div>
                <div id="playerMonsterMoves" style="font-size: 11px; color: var(--neon-blue); margin-top: 4px;">--</div>
              </div>
@@ -319,11 +320,12 @@
              <div id="opponentMonsterInfo" style="background: rgba(0,0,0,0.2); padding: 15px; border-radius: 3px; border-left: 3px solid var(--neon-orange);">
                <div style="font-size: 16px; font-weight: bold; color: var(--text-primary); margin-bottom: 8px;" id="opponentMonsterName">--</div>
                <div style="font-size: 11px; color: var(--text-secondary); margin-bottom: 10px;" id="opponentMonsterType">--</div>
-               <div class="detailed-stats" style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 10px;">
-                 <div class="detailed-stat"><span class="stat-name">HP</span><span class="stat-value" id="opponentMonsterHp">--</span></div>
-                 <div class="detailed-stat"><span class="stat-name">ATK</span><span class="stat-value" id="opponentMonsterAtk">--</span></div>
-                 <div class="detailed-stat"><span class="stat-name">DEF</span><span class="stat-value" id="opponentMonsterDef">--</span></div>
-               </div>
+<div class="detailed-stats" style="display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 8px; margin-top: 10px;">
+                   <div class="detailed-stat"><span class="stat-name">HP</span><span class="stat-value" id="opponentMonsterHp" style="color: var(--neon-blue);">--</span></div>
+                   <div class="detailed-stat"><span class="stat-name">ATK</span><span class="stat-value" id="opponentMonsterAtk" style="color: var(--neon-pink);">--</span></div>
+                   <div class="detailed-stat"><span class="stat-name">DEF</span><span class="stat-value" id="opponentMonsterDef" style="color: var(--neon-orange);">--</span></div>
+                   <div class="detailed-stat"><span class="stat-name">SPD</span><span class="stat-value" id="opponentMonsterSpd" style="color: var(--neon-purple);">--</span></div>
+                 </div>
                <div style="margin-top: 10px; font-size: 11px; color: var(--text-secondary);">Moves:</div>
                <div id="opponentMonsterMoves" style="font-size: 11px; color: var(--neon-orange); margin-top: 4px;">--</div>
              </div>
