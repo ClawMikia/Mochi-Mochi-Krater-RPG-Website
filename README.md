@@ -6,7 +6,7 @@ A web-based monster battling game inspired by classics like Pokemon Deluge and P
 
 - `index.html` - Main entry point / monster catalog
 - `battle.html` - Battle arena (1v1, 2v2, 3v3)
-- `team.html` - Team management / team builder
+- `battle.html` - Team management / team builder
 - `how-to-play.html` - How to play guide
 - `css/styles.css` - Main stylesheet
 - `js/monsters.js` - Monster data (200 monsters with stats 250-300)
@@ -24,7 +24,7 @@ A web-based monster battling game inspired by classics like Pokemon Deluge and P
 
 ## Development
 
-To run locally, simply open any HTML file (`index.html`, `battle.html`, `team.html`, or `how-to-play.html`) in a web browser.
+To run locally, simply open any HTML file (`index.html`, `battle.html`, `battle.html`, or `how-to-play.html`) in a web browser.
 
 ## Technologies
 
