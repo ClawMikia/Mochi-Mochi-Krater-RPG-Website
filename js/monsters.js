@@ -236,5 +236,9 @@ const MONSTER_DB = [
   { id: 235, name: "WiFiWrecker", type: "Tech", hp: 210, atk: 350, def: 200, spd: 240 },
   { id: 236, name: "WireWrecker", type: "Hardware", hp: 307, atk: 200, def: 338, spd: 155 },
   { id: 237, name: "WrenchWrecker", type: "Tool", hp: 314, atk: 200, def: 331, spd: 155 },
-  { id: 238, name: "ZipperZapper", type: "Clothing", hp: 299, atk: 200, def: 345, spd: 156 }
+  { id: 238, name: "ZipperZapper", type: "Clothing", hp: 299, atk: 200, def: 345, spd: 156 },
+  { id: 239, name: "CrystalClash", type: "Crystal", hp: 255, atk: 252, def: 253, spd: 240 },
+  { id: 240, name: "ObsidianOutrage", type: "Mineral", hp: 248, atk: 258, def: 247, spd: 247 },
+  { id: 241, name: "Spikeman", type: "Defense", hp: 251, atk: 250, def: 249, spd: 250 },
+  { id: 242, name: "StaplerSlayer", type: "Office", hp: 260, atk: 245, def: 250, spd: 245 }
 ];
