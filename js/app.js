@@ -14,6 +14,7 @@ const getMaxTeamSize = function() {
 let battleReady = false;
 let lastLogIndex = 0;
 let currentTeamPage = 1;
+let currentCatalogPage = 1;
 let modalMonsterList = [];
 const MONSTERS_PER_PAGE = 12;
 
@@ -83,7 +84,7 @@ async function initApp() {
   if (searchInputTeam) searchInputTeam.addEventListener('input', filterMonstersTeam);
   if (typeFilters) {
     initializeTypeFilters('typeFilters', 'main');
-    displayMonsters(MONSTER_DB);
+    displayMonsters(MONSTER_DB, currentCatalogPage);
   }
   if (typeFiltersTeam) {
     initializeTypeFilters('typeFiltersTeam', 'team');
@@ -197,18 +198,113 @@ function initializeTypeFilters(containerId, context) {
   });
 }
 
-function displayMonsters(monsters) {
+function displayMonsters(monsters, page) {
+  page = page || currentCatalogPage;
   const grid = document.getElementById('monsterGrid');
   if (!grid) return;
   grid.innerHTML = '';
-  monsters.forEach(function(m) {
+  const paginationBar = document.getElementById('catalogPagination');
+  const startIndex = (page - 1) * MONSTERS_PER_PAGE;
+  const paginatedMonsters = monsters.slice(startIndex, startIndex + MONSTERS_PER_PAGE);
+  const totalPages = Math.ceil(monsters.length / MONSTERS_PER_PAGE) || 1;
+  paginatedMonsters.forEach(function(m) {
     const spd = m.spd || 150;
     const card = document.createElement('div');
     card.className = 'monster-card';
-     card.innerHTML = '<img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:120px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:2px; margin-bottom:10px; font-size:11px; color:var(--text-secondary);">To be born soon</div><div class="monster-name">' + m.name + '</div><div class="monster-type">' + m.type + '</div><div class="monster-stats"><div class="stat-bar"><span class="label">HP</span><div class="bar-container"><div class="bar-fill" style="width:100%; background: var(--neon-blue);"></div></div><span class="value">' + m.hp + '</span></div><div class="stat-bar"><span class="label">ATK</span><div class="bar-container"><div class="bar-fill" style="width:' + (m.atk / 300 * 100) + '%; background: var(--neon-pink);"></div></div><span class="value">' + m.atk + '</span></div><div class="stat-bar"><span class="label">DEF</span><div class="bar-container"><div class="bar-fill" style="width:' + (m.def / 300 * 100) + '%; background: var(--neon-green);"></div></div><span class="value">' + m.def + '</span></div><div class="stat-bar"><span class="label">SPD</span><div class="bar-container"><div class="bar-fill" style="width:' + (spd / 300 * 100) + '%; background: var(--neon-purple);"></div></div><span class="value">' + spd + '</span></div></div>';
+    card.innerHTML = '<div class="image-container"><div class="image-loader" id="loader-' + m.id + '"><div class="spinner"></div></div><img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onload="this.classList.add(\'loaded\'); if(this.previousElementSibling) this.previousElementSibling.classList.add(\'hidden\');" onerror="this.style.display=\'none\'; this.previousElementSibling.classList.remove(\'hidden\'); this.previousElementSibling.innerHTML=\'<div style=display:flex;width:100%;height:120px;align-items:center;justify-content:center;font-size:11px;color:var(--text-secondary);>To be born soon</div>\';"><div class="fallback-text" style=\'display:none;\'>To be born soon</div></div><div class="monster-name">' + m.name + '</div><div class="monster-type">' + m.type + '</div><div class="monster-stats"><div class="stat-bar"><span class="label">HP</span><div class="bar-container"><div class="bar-fill" style="width:100%; background: var(--neon-blue);"></div></div><span class="value">' + m.hp + '</span></div><div class="stat-bar"><span class="label">ATK</span><div class="bar-container"><div class="bar-fill" style="width:' + (m.atk / 300 * 100) + '%; background: var(--neon-pink);"></div></div><span class="value">' + m.atk + '</span></div><div class="stat-bar"><span class="label">DEF</span><div class="bar-container"><div class="bar-fill" style="width:' + (m.def / 300 * 100) + '%; background: var(--neon-green);"></div></div><span class="value">' + m.def + '</span></div><div class="stat-bar"><span class="label">SPD</span><div class="bar-container"><div class="bar-fill" style="width:' + (spd / 300 * 100) + '%; background: var(--neon-purple);"></div></div><span class="value">' + spd + '</span></div></div>';
     card.addEventListener('click', function() { showMonsterModal(m); });
     grid.appendChild(card);
   });
+  if (paginationBar) {
+    renderCatalogPagination(paginationBar, page, totalPages, monsters.length);
+  }
+}
+
+function renderCatalogPagination(bar, page, totalPages, totalItems) {
+  bar.innerHTML = '';
+  const info = document.createElement('span');
+  info.className = 'pagination-info';
+  info.textContent = 'Page ' + page + ' / ' + totalPages + ' (' + totalItems + ' monsters)';
+  bar.appendChild(info);
+
+  const pagesContainer = document.createElement('div');
+  pagesContainer.className = 'pagination-pages';
+
+  const firstBtn = document.createElement('button');
+  firstBtn.className = 'pagination-btn';
+  firstBtn.textContent = 'First';
+  firstBtn.disabled = page === 1;
+  firstBtn.addEventListener('click', function() { if (page > 1) displayMonsters(MONSTER_DB, 1); });
+  pagesContainer.appendChild(firstBtn);
+
+  const prevBtn = document.createElement('button');
+  prevBtn.className = 'pagination-btn';
+  prevBtn.textContent = 'Prev';
+  prevBtn.disabled = page === 1;
+  prevBtn.addEventListener('click', function() { if (page > 1) displayMonsters(MONSTER_DB, page - 1); });
+  pagesContainer.appendChild(prevBtn);
+
+  const maxButtons = 5;
+  let startPage = Math.max(1, page - Math.floor(maxButtons / 2));
+  let endPage = Math.min(totalPages, startPage + maxButtons - 1);
+  if (endPage - startPage < maxButtons - 1) {
+    startPage = Math.max(1, endPage - maxButtons + 1);
+  }
+  if (startPage > 1) {
+    const pageBtn = createPageButton(1, page);
+    pagesContainer.appendChild(pageBtn);
+  }
+  if (startPage > 2) {
+    const dots = document.createElement('span');
+    dots.textContent = '...';
+    dots.style.color = 'var(--text-secondary)';
+    dots.style.fontFamily = "'Courier New', monospace";
+    dots.style.fontSize = '12px';
+    dots.style.letterSpacing = '2px';
+    pagesContainer.appendChild(dots);
+  }
+  for (let i = startPage; i <= endPage; i++) {
+    const pageBtn = createPageButton(i, page);
+    pagesContainer.appendChild(pageBtn);
+  }
+  if (endPage < totalPages - 1) {
+    const dots = document.createElement('span');
+    dots.textContent = '...';
+    dots.style.color = 'var(--text-secondary)';
+    dots.style.fontFamily = "'Courier New', monospace";
+    dots.style.fontSize = '12px';
+    dots.style.letterSpacing = '2px';
+    pagesContainer.appendChild(dots);
+  }
+  if (endPage < totalPages) {
+    const pageBtn = createPageButton(totalPages, page);
+    pagesContainer.appendChild(pageBtn);
+  }
+
+  const nextBtn = document.createElement('button');
+  nextBtn.className = 'pagination-btn';
+  nextBtn.textContent = 'Next';
+  nextBtn.disabled = page === totalPages;
+  nextBtn.addEventListener('click', function() { if (page < totalPages) displayMonsters(MONSTER_DB, page + 1); });
+  pagesContainer.appendChild(nextBtn);
+
+  const lastBtn = document.createElement('button');
+  lastBtn.className = 'pagination-btn';
+  lastBtn.textContent = 'Last';
+  lastBtn.disabled = page === totalPages;
+  lastBtn.addEventListener('click', function() { if (page < totalPages) displayMonsters(MONSTER_DB, totalPages); });
+  pagesContainer.appendChild(lastBtn);
+
+  bar.appendChild(pagesContainer);
+}
+
+function createPageButton(pageNum, currentPage) {
+  const btn = document.createElement('button');
+  btn.className = 'pagination-btn page-num';
+  if (pageNum === currentPage) btn.classList.add('active');
+  btn.textContent = pageNum;
+  btn.addEventListener('click', function() { displayMonsters(MONSTER_DB, pageNum); });
+  return btn;
 }
 
 function displayMonstersTeam(monsters) {
@@ -221,7 +317,7 @@ function displayMonstersTeam(monsters) {
     const card = document.createElement('div');
     card.className = 'monster-card';
     card.style.opacity = (selectedTeam.length < maxSlots || selectedTeam.find(function(t) { return t.id === m.id; })) ? '1' : '0.4';
-     card.innerHTML = '<img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:120px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:2px; margin-bottom:10px; font-size:11px; color:var(--text-secondary);">To be born soon</div><div class="monster-name">' + m.name + '</div><div class="monster-type">' + m.type + '</div><div class="monster-stats"><div class="stat-bar"><span class="label">HP</span><div class="bar-container"><div class="bar-fill" style="width:100%; background: var(--neon-blue);"></div></div><span class="value">' + m.hp + '</span></div><div class="stat-bar"><span class="label">ATK</span><div class="bar-container"><div class="bar-fill" style="width:' + (m.atk / 300 * 100) + '%; background: var(--neon-pink);"></div></div><span class="value">' + m.atk + '</span></div><div class="stat-bar"><span class="label">DEF</span><div class="bar-container"><div class="bar-fill" style="width:' + (m.def / 300 * 100) + '%; background: var(--neon-green);"></div></div><span class="value">' + m.def + '</span></div><div class="stat-bar"><span class="label">SPD</span><div class="bar-container"><div class="bar-fill" style="width:' + (spd / 300 * 100) + '%; background: var(--neon-purple);"></div></div><span class="value">' + spd + '</span></div></div>';
+     card.innerHTML = '<div class="image-container"><div class="image-loader" id="loader-team-' + m.id + '"><div class="spinner"></div></div><img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onload="this.classList.add(\'loaded\'); if(this.previousElementSibling) this.previousElementSibling.classList.add(\'hidden\');" onerror="this.style.display=\'none\'; this.previousElementSibling.classList.remove(\'hidden\'); this.previousElementSibling.innerHTML=\'<div style=display:flex;width:100%;height:120px;align-items:center;justify-content:center;font-size:11px;color:var(--text-secondary);>To be born soon</div>\';"><div class="fallback-text" style=\'display:none;\'>To be born soon</div></div><div class="monster-name">' + m.name + '</div><div class="monster-type">' + m.type + '</div><div class="monster-stats"><div class="stat-bar"><span class="label">HP</span><div class="bar-container"><div class="bar-fill" style="width:100%; background: var(--neon-blue);"></div></div><span class="value">' + m.hp + '</span></div><div class="stat-bar"><span class="label">ATK</span><div class="bar-container"><div class="bar-fill" style="width:' + (m.atk / 300 * 100) + '%; background: var(--neon-pink);"></div></div><span class="value">' + m.atk + '</span></div><div class="stat-bar"><span class="label">DEF</span><div class="bar-container"><div class="bar-fill" style="width:' + (m.def / 300 * 100) + '%; background: var(--neon-green);"></div></div><span class="value">' + m.def + '</span></div><div class="stat-bar"><span class="label">SPD</span><div class="bar-container"><div class="bar-fill" style="width:' + (spd / 300 * 100) + '%; background: var(--neon-purple);"></div></div><span class="value">' + spd + '</span></div></div>';
     card.addEventListener('click', function() { selectTeamMonster(m); });
     grid.appendChild(card);
   });
@@ -236,7 +332,8 @@ function filterMonsters() {
   let filtered = MONSTER_DB;
   if (activeFilter !== 'all') filtered = filtered.filter(function(m) { return m.type === activeFilter; });
   if (search) filtered = filtered.filter(function(m) { return m.name.toLowerCase().indexOf(search) !== -1 || m.type.toLowerCase().indexOf(search) !== -1; });
-  displayMonsters(filtered);
+  currentCatalogPage = 1;
+  displayMonsters(filtered, 1);
 }
 
 function filterMonstersTeam() {
@@ -279,6 +376,7 @@ function displayMonstersModal(monsters, page) {
   if (!grid) return;
   
   const maxSlots = getMaxTeamSize ? getMaxTeamSize() : 3;
+  page = page || 1;
   const startIndex = (page - 1) * MONSTERS_PER_PAGE;
   const paginatedMonsters = monsters.slice(startIndex, startIndex + MONSTERS_PER_PAGE);
   const totalPages = Math.ceil(monsters.length / MONSTERS_PER_PAGE) || 1;
@@ -289,7 +387,7 @@ function displayMonstersModal(monsters, page) {
     const card = document.createElement('div');
     card.className = 'monster-card';
     card.style.opacity = (selectedTeam.length < maxSlots || selectedTeam.find(function(t) { return t.id === m.id; })) ? '1' : '0.4';
-     card.innerHTML = '<img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:120px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:2px; margin-bottom:10px; font-size:11px; color:var(--text-secondary);">To be born soon</div><div class="monster-name">' + m.name + '</div><div class="monster-type">' + m.type + '</div><div class="monster-stats"><div class="stat-bar"><span class="label">HP</span><div class="bar-container"><div class="bar-fill" style="width:100%; background: var(--neon-blue);"></div></div><span class="value">' + m.hp + '</span></div><div class="stat-bar"><span class="label">ATK</span><div class="bar-container"><div class="bar-fill" style="width:' + (m.atk / 300 * 100) + '%; background: var(--neon-pink);"></div></div><span class="value">' + m.atk + '</span></div><div class="stat-bar"><span class="label">DEF</span><div class="bar-container"><div class="bar-fill" style="width:' + (m.def / 300 * 100) + '%; background: var(--neon-green);"></div></div><span class="value">' + m.def + '</span></div><div class="stat-bar"><span class="label">SPD</span><div class="bar-container"><div class="bar-fill" style="width:' + (spd / 300 * 100) + '%; background: var(--neon-purple);"></div></div><span class="value">' + spd + '</span></div></div>';
+     card.innerHTML = '<div class="image-container"><div class="image-loader" id="loader-modal-' + m.id + '"><div class="spinner"></div></div><img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onload="this.classList.add(\'loaded\'); if(this.previousElementSibling) this.previousElementSibling.classList.add(\'hidden\');" onerror="this.style.display=\'none\'; this.previousElementSibling.classList.remove(\'hidden\'); this.previousElementSibling.innerHTML=\'<div style=display:flex;width:100%;height:120px;align-items:center;justify-content:center;font-size:11px;color:var(--text-secondary);>To be born soon</div>\';"><div class="fallback-text" style=\'display:none;\'>To be born soon</div></div><div class="monster-name">' + m.name + '</div><div class="monster-type">' + m.type + '</div><div class="monster-stats"><div class="stat-bar"><span class="label">HP</span><div class="bar-container"><div class="bar-fill" style="width:100%; background: var(--neon-blue);"></div></div><span class="value">' + m.hp + '</span></div><div class="stat-bar"><span class="label">ATK</span><div class="bar-container"><div class="bar-fill" style="width:' + (m.atk / 300 * 100) + '%; background: var(--neon-pink);"></div></div><span class="value">' + m.atk + '</span></div><div class="stat-bar"><span class="label">DEF</span><div class="bar-container"><div class="bar-fill" style="width:' + (m.def / 300 * 100) + '%; background: var(--neon-green);"></div></div><span class="value">' + m.def + '</span></div><div class="stat-bar"><span class="label">SPD</span><div class="bar-container"><div class="bar-fill" style="width:' + (spd / 300 * 100) + '%; background: var(--neon-purple);"></div></div><span class="value">' + spd + '</span></div></div>';
     card.addEventListener('click', function() { selectTeamMonster(m); });
     grid.appendChild(card);
   });
@@ -368,7 +466,7 @@ function updateTeamSlots() {
     const monster = selectedTeam[i];
     if (monster) {
       slot.classList.add('filled');
-      slot.innerHTML = '<img src="assets/characters/' + monster.name + '.png" alt="' + monster.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:80px; height:80px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:2px; font-size:10px; color:var(--text-secondary);">To be born soon</div><div class="slot-name">' + monster.name + '</div><button class="remove-btn" onclick="removeFromTeam(' + i + ')">Remove</button>';
+      slot.innerHTML = '<div class="image-container"><div class="image-loader"><div class="spinner"></div></div><img src="assets/characters/' + monster.name + '.png" alt="' + monster.name + '" style="width:80px;height:80px;" onload="this.classList.add(\'loaded\'); this.style.opacity=\'1\'; if(this.previousElementSibling) this.previousElementSibling.classList.add(\'hidden\');" onerror="this.style.display=\'none\'; this.previousElementSibling.classList.remove(\'hidden\'); this.previousElementSibling.innerHTML=\'<div style=display:flex;width:80px;height:80px;align-items:center;justify-content:center;font-size:10px;color:var(--text-secondary);>To be born soon</div>\';"><div class="fallback-text" style=\'display:none;\'>To be born soon</div></div><div class="slot-name">' + monster.name + '</div><button class="remove-btn" onclick="removeFromTeam(' + i + ')">Remove</button>';
     } else {
       slot.classList.remove('filled');
       slot.innerHTML = '<div style="color: var(--text-secondary); font-size: 12px;">SLOT ' + (i + 1) + '</div>';
@@ -431,7 +529,7 @@ function refreshModalDisplay() {
     const card = document.createElement('div');
     card.className = 'monster-card';
     card.style.opacity = (selectedTeam.length < maxSlots || selectedTeam.find(function(t) { return t.id === m.id; })) ? '1' : '0.4';
-     card.innerHTML = '<img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:120px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:2px; margin-bottom:10px; font-size:11px; color:var(--text-secondary);">To be born soon</div><div class="monster-name">' + m.name + '</div><div class="monster-type">' + m.type + '</div><div class="monster-stats"><div class="stat-bar"><span class="label">HP</span><div class="bar-container"><div class="bar-fill" style="width:100%; background: var(--neon-blue);"></div></div><span class="value">' + m.hp + '</span></div><div class="stat-bar"><span class="label">ATK</span><div class="bar-container"><div class="bar-fill" style="width:' + (m.atk / 300 * 100) + '%; background: var(--neon-pink);"></div></div><span class="value">' + m.atk + '</span></div><div class="stat-bar"><span class="label">DEF</span><div class="bar-container"><div class="bar-fill" style="width:' + (m.def / 300 * 100) + '%; background: var(--neon-green);"></div></div><span class="value">' + m.def + '</span></div><div class="stat-bar"><span class="label">SPD</span><div class="bar-container"><div class="bar-fill" style="width:' + (spd / 300 * 100) + '%; background: var(--neon-purple);"></div></div><span class="value">' + spd + '</span></div></div>';
+     card.innerHTML = '<div class="image-container"><div class="image-loader"><div class="spinner"></div></div><img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onload="this.classList.add(\'loaded\'); if(this.previousElementSibling) this.previousElementSibling.classList.add(\'hidden\');" onerror="this.style.display=\'none\'; this.previousElementSibling.classList.remove(\'hidden\'); this.previousElementSibling.innerHTML=\'<div style=display:flex;width:100%;height:120px;align-items:center;justify-content:center;font-size:11px;color:var(--text-secondary);>To be born soon</div>\';"><div class="fallback-text" style=\'display:none;\'>To be born soon</div></div><div class="monster-name">' + m.name + '</div><div class="monster-type">' + m.type + '</div><div class="monster-stats"><div class="stat-bar"><span class="label">HP</span><div class="bar-container"><div class="bar-fill" style="width:100%; background: var(--neon-blue);"></div></div><span class="value">' + m.hp + '</span></div><div class="stat-bar"><span class="label">ATK</span><div class="bar-container"><div class="bar-fill" style="width:' + (m.atk / 300 * 100) + '%; background: var(--neon-pink);"></div></div><span class="value">' + m.atk + '</span></div><div class="stat-bar"><span class="label">DEF</span><div class="bar-container"><div class="bar-fill" style="width:' + (m.def / 300 * 100) + '%; background: var(--neon-green);"></div></div><span class="value">' + m.def + '</span></div><div class="stat-bar"><span class="label">SPD</span><div class="bar-container"><div class="bar-fill" style="width:' + (spd / 300 * 100) + '%; background: var(--neon-purple);"></div></div><span class="value">' + spd + '</span></div></div>';
     card.addEventListener('click', function() { selectTeamMonster(m); });
     grid.appendChild(card);
   });
@@ -477,7 +575,7 @@ function updateTeamStats() {
 
 function showMonsterModal(monster) {
   const spd = monster.spd || 150;
-  document.getElementById('monsterModalContent').innerHTML = '<div class="viewer-image"><img src="assets/characters/' + monster.name + '.png" alt="' + monster.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:100%; align-items:center; justify-content:center; font-size:14px; color:var(--text-secondary);">To be born soon</div></div><div class="viewer-stats"><h2>' + monster.name + '</h2><div class="type-badge">' + monster.type + '</div><div class="detailed-stats"><div class="detailed-stat"><span class="stat-name">HP</span><span class="stat-value">' + monster.hp + '</span></div><div class="detailed-stat"><span class="stat-name">ATK</span><span class="stat-value">' + monster.atk + '</span></div><div class="detailed-stat"><span class="stat-name">DEF</span><span class="stat-value">' + monster.def + '</span></div><div class="detailed-stat"><span class="stat-name">SPD</span><span class="stat-value">' + spd + '</span></div><div class="detailed-stat"><span class="stat-name">Total</span><span class="stat-value">' + (monster.hp + monster.atk + monster.def + spd) + '</span></div></div></div>';
+  document.getElementById('monsterModalContent').innerHTML = '<div class="viewer-image"><div class="image-loader"><div class="spinner" style="width:40px;height:40px;border-width:4px;"></div></div><img src="assets/characters/' + monster.name + '.png" alt="' + monster.name + '" style="opacity:0;" onload="this.classList.add(\'loaded\'); this.style.opacity=\'1\'; if(this.previousElementSibling) this.previousElementSibling.classList.add(\'hidden\');" onerror="this.style.display=\'none\'; this.previousElementSibling.classList.remove(\'hidden\'); this.previousElementSibling.innerHTML=\'<div style=display:flex;width:100%;height:100%;align-items:center;justify-content:center;font-size:14px;color:var(--text-secondary);>To be born soon</div>\';"><div class="fallback-text" style=\'display:none;\'>To be born soon</div></div><div class="viewer-stats"><h2>' + monster.name + '</h2><div class="type-badge">' + monster.type + '</div><div class="detailed-stats"><div class="detailed-stat"><span class="stat-name">HP</span><span class="stat-value">' + monster.hp + '</span></div><div class="detailed-stat"><span class="stat-name">ATK</span><span class="stat-value">' + monster.atk + '</span></div><div class="detailed-stat"><span class="stat-name">DEF</span><span class="stat-value">' + monster.def + '</span></div><div class="detailed-stat"><span class="stat-name">SPD</span><span class="stat-value">' + spd + '</span></div><div class="detailed-stat"><span class="stat-name">Total</span><span class="stat-value">' + (monster.hp + monster.atk + monster.def + spd) + '</span></div></div></div>';
   const modal = document.getElementById('monsterModal');
   if (modal) {
     modal.classList.remove('hidden');
@@ -702,26 +800,46 @@ function updateMonsterImages() {
   const player2Image = document.getElementById('player2Image');
 
   if (p1 && player1Image) {
-    player1Image.style.display = 'block';
+    player1Image.style.opacity = '0';
+    player1Image.style.transition = 'opacity 0.3s ease';
     const fallback1 = player1Image.nextElementSibling;
     if (fallback1) fallback1.style.display = 'none';
-    player1Image.src = 'assets/characters/' + p1.name + '.png';
-    player1Image.onerror = function() {
-      this.style.display = 'none';
-      const fallback = this.nextElementSibling;
-      if (fallback) fallback.style.display = 'flex';
-    };
+    const newSrc = 'assets/characters/' + p1.name + '.png';
+    if (player1Image.src.indexOf(newSrc) === -1 || player1Image.src === '') {
+      player1Image.src = newSrc;
+      player1Image.onerror = function() {
+        this.style.display = 'none';
+        const fb = this.nextElementSibling;
+        if (fb) fb.style.display = 'flex';
+      };
+      player1Image.onload = function() {
+        this.style.opacity = '1';
+        this.style.display = 'block';
+      };
+    } else {
+      player1Image.style.opacity = '1';
+    }
   }
   if (p2 && player2Image) {
-    player2Image.style.display = 'block';
+    player2Image.style.opacity = '0';
+    player2Image.style.transition = 'opacity 0.3s ease';
     const fallback2 = player2Image.nextElementSibling;
     if (fallback2) fallback2.style.display = 'none';
-    player2Image.src = 'assets/characters/' + p2.name + '.png';
-    player2Image.onerror = function() {
-      this.style.display = 'none';
-      const fallback = this.nextElementSibling;
-      if (fallback) fallback.style.display = 'flex';
-    };
+    const newSrc = 'assets/characters/' + p2.name + '.png';
+    if (player2Image.src.indexOf(newSrc) === -1 || player2Image.src === '') {
+      player2Image.src = newSrc;
+      player2Image.onerror = function() {
+        this.style.display = 'none';
+        const fb = this.nextElementSibling;
+        if (fb) fb.style.display = 'flex';
+      };
+      player2Image.onload = function() {
+        this.style.opacity = '1';
+        this.style.display = 'block';
+      };
+    } else {
+      player2Image.style.opacity = '1';
+    }
   }
 }
 
@@ -749,7 +867,7 @@ function showSwitchPanel() {
     const btn = document.createElement('div');
     btn.className = 'monster-card';
     btn.style.cssText = 'flex: 0 0 120px; cursor: pointer;';
-    btn.innerHTML = '<img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onerror="this.style.display=\'none\'; this.nextElementSibling.style.display=\'flex\';"><div style="display:none; width:100%; height:60px; align-items:center; justify-content:center; background: rgba(0,0,0,0.3); border-radius:2px; font-size:9px; color:var(--text-secondary);">To be born soon</div><div class="monster-name" style="font-size: 11px;">' + m.name + '</div><div style="font-size: 10px; color: var(--text-secondary);">HP: ' + m.currentHp + '</div>';
+    btn.innerHTML = '<div class="image-container"><div class="image-loader" id="loader-switch-' + m.id + '"><div class="spinner"></div></div><img src="assets/characters/' + m.name + '.png" alt="' + m.name + '" onload="this.classList.add(\'loaded\'); if(this.previousElementSibling) this.previousElementSibling.classList.add(\'hidden\');" onerror="this.style.display=\'none\'; this.previousElementSibling.classList.remove(\'hidden\'); this.previousElementSibling.innerHTML=\'<div style=display:flex;width:100%;height:60px;align-items:center;justify-content:center;font-size:9px;color:var(--text-secondary);>To be born soon</div>\';"><div class="fallback-text" style=\'display:none;\'>To be born soon</div></div><div class="monster-name" style="font-size: 11px;">' + m.name + '</div><div style="font-size: 10px; color: var(--text-secondary);">HP: ' + m.currentHp + '</div>';
     btn.addEventListener('click', function() {
       battleEngine.switchMonster(playerTeam, m.index);
       renderEngineLogs();

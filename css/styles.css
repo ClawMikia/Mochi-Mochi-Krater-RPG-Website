@@ -420,6 +420,89 @@ body::before {
   border: 1px solid rgba(255, 255, 255, 0.05);
 }
 
+.monster-card .image-container {
+  position: relative;
+  width: 100%;
+  height: 120px;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  overflow: hidden;
+}
+
+.monster-card .image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.monster-card .image-container img.loaded {
+  opacity: 1;
+}
+
+.monster-card .image-loader {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.monster-card .image-loader.hidden {
+  display: none;
+}
+
+.spinner {
+  width: 30px;
+  height: 30px;
+  border: 3px solid rgba(255, 255, 255, 0.1);
+  border-top-color: var(--neon-pink);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+  box-shadow: 0 0 10px rgba(233, 69, 96, 0.3);
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.monster-card .fallback-text {
+  display: none;
+  width: 100%;
+  height: 120px;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+  margin-bottom: 10px;
+  font-size: 11px;
+  color: var(--text-secondary);
+}
+
+.monster-card img {
+  width: 100%;
+  height: 120px;
+  object-fit: contain;
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 2px;
+  margin-bottom: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  transition: opacity 0.3s ease;
+  opacity: 0;
+}
+
+.monster-card img.loaded {
+  opacity: 1;
+}
+
 .monster-card .monster-name {
   font-size: 13px;
   font-weight: bold;
@@ -481,11 +564,89 @@ body::before {
   color: var(--text-primary);
 }
 
+.pagination-bar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 25px;
+  padding: 15px;
+  flex-wrap: wrap;
+}
+
+.pagination-info {
+  font-size: 12px;
+  color: var(--text-secondary);
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  margin: 0 10px;
+}
+
+.pagination-btn {
+  padding: 8px 18px;
+  background: var(--building-secondary);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: var(--text-primary);
+  font-family: 'Courier New', monospace;
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: all 0.3s ease;
+}
+
+.pagination-btn:hover:not(:disabled) {
+  background: var(--building-accent);
+  border-color: var(--neon-pink);
+  box-shadow: 0 0 10px rgba(233, 69, 96, 0.3);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.3;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.pagination-btn.page-num.active {
+  background: var(--neon-pink);
+  border-color: var(--neon-pink);
+  color: #fff;
+  box-shadow: 0 0 15px rgba(233, 69, 96, 0.4);
+}
+
+.pagination-pages {
+  display: flex;
+  gap: 5px;
+  align-items: center;
+}
+
+@media (max-width: 768px) {
+  .pagination-bar {
+    gap: 5px;
+    padding: 10px;
+  }
+
+  .pagination-btn {
+    padding: 6px 12px;
+    font-size: 10px;
+  }
+
+  .pagination-info {
+    font-size: 10px;
+    margin: 0 5px;
+  }
+
+  .pagination-pages {
+    gap: 3px;
+  }
+}
+
 .viewer-panel {
   background: var(--building-primary);
   border: 2px solid rgba(255, 255, 255, 0.15);
   border-radius: 6px;
-  padding: 30px;
+  padding: 40px;
   margin: 20px 0;
   position: relative;
   box-shadow:
@@ -512,8 +673,8 @@ body::before {
 }
 
 .viewer-image {
-  width: 250px;
-  height: 250px;
+  width: 400px;
+  height: 400px;
   background: rgba(0, 0, 0, 0.4);
   border: 2px solid rgba(255, 255, 255, 0.1);
   border-radius: 4px;
@@ -536,8 +697,8 @@ body::before {
 }
 
 .viewer-stats h2 {
-  font-size: 28px;
-  margin-bottom: 10px;
+  font-size: 36px;
+  margin-bottom: 15px;
   color: var(--text-primary);
   letter-spacing: 3px;
   text-transform: uppercase;
@@ -547,22 +708,22 @@ body::before {
 
 .viewer-stats .type-badge {
   display: inline-block;
-  padding: 5px 15px;
+  padding: 8px 20px;
   background: var(--neon-blue);
   color: #000;
-  font-size: 12px;
+  font-size: 14px;
   font-weight: bold;
   letter-spacing: 2px;
   border-radius: 2px;
-  margin-bottom: 20px;
+  margin-bottom: 25px;
   text-transform: uppercase;
 }
 
 .detailed-stats {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 10px;
-  margin-top: 20px;
+  gap: 15px;
+  margin-top: 25px;
 }
 
 .button-container {
@@ -572,7 +733,7 @@ body::before {
 
 .detailed-stat {
   background: rgba(0, 0, 0, 0.2);
-  padding: 10px;
+  padding: 14px;
   border-radius: 2px;
   border-left: 3px solid var(--neon-green);
   display: flex;
@@ -581,14 +742,14 @@ body::before {
 }
 
 .detailed-stat .stat-name {
-  font-size: 12px;
+  font-size: 14px;
   color: var(--text-secondary);
   text-transform: uppercase;
   letter-spacing: 1px;
 }
 
 .detailed-stat .stat-value {
-  font-size: 18px;
+  font-size: 22px;
   font-weight: bold;
   color: var(--text-primary);
 }
@@ -674,19 +835,19 @@ body::before {
 
 .search-bar {
   display: flex;
-  gap: 10px;
-  margin: 20px 0;
+  gap: 8px;
+  margin: 12px 0;
 }
 
 .search-input {
   flex: 1;
-  padding: 12px 20px;
+  padding: 10px 16px;
   background: var(--building-primary);
   border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 3px;
   color: var(--text-primary);
   font-family: 'Courier New', monospace;
-  font-size: 14px;
+  font-size: 12px;
   letter-spacing: 1px;
   transition: all 0.3s ease;
 }
@@ -704,13 +865,13 @@ body::before {
 
 .filter-bar {
   display: flex;
-  gap: 10px;
+  gap: 7px;
   flex-wrap: wrap;
-  margin: 15px 0;
+  margin: 10px 0;
 }
 
 .filter-btn {
-  padding: 8px 16px;
+  padding: 10px 18px;
   background: var(--building-secondary);
   border: 1px solid rgba(255, 255, 255, 0.1);
   color: var(--text-primary);
@@ -1427,10 +1588,51 @@ footer {
     flex-direction: column;
   }
   
-[id="playerMonsterInfo"] .detailed-stats,
+  [id="playerMonsterInfo"] .detailed-stats,
   [id="opponentMonsterInfo"] .detailed-stats {
     grid-template-columns: 1fr;
   }
 }
+
+@media (min-width: 1400px) {
+  .viewer-image {
+    width: 500px;
+    height: 500px;
+  }
+  
+  #monsterModal .viewer-panel {
+    max-width: 1200px;
+  }
+  
+  #teamSelectModal .viewer-panel {
+    max-width: 1400px;
+  }
+  
+  .monster-card img {
+    height: 160px;
+  }
+  
+  .monster-card .image-container {
+    height: 160px;
+  }
+}
+
+@media (min-width: 768px) {
+  #monsterModal .monster-card img,
+  #teamSelectModal .monster-card img {
+    height: 140px;
+  }
+  
+  #monsterModal .monster-card .image-container,
+  #teamSelectModal .monster-card .image-container {
+    height: 140px;
+  }
+  
+  #monsterModal .monster-card .fallback-text,
+  #teamSelectModal .monster-card .fallback-text {
+    height: 140px;
+  }
+}
+
 
 

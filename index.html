@@ -51,11 +51,12 @@
 
     <div class="floor">
       <div class="floor-header">Monster Catalog</div>
-      <div class="filter-bar" id="typeFilters"></div>
+      <div class="filter-bar" id="typeFilters" style="max-height: 200px; overflow-y: auto;"></div>
       <div class="search-bar">
         <input type="text" id="searchInput" class="search-input" placeholder="Search monsters...">
       </div>
       <div class="monster-grid" id="monsterGrid"></div>
+      <div class="pagination-bar" id="catalogPagination"></div>
     </div>
 
     <div class="floor">
@@ -107,9 +108,9 @@
 }
 #monsterModal .viewer-panel {
   width: fit-content;
-  min-width: 300px;
-  max-width: 90vw;
-  max-height: 90vh;
+  min-width: 500px;
+  max-width: 95vw;
+  max-height: 95vh;
   overflow-y: auto;
   margin: 0 auto;
 }
@@ -129,7 +130,7 @@
 </style>
    <div id="monsterModal" class="hidden">
      <div class="viewer-panel">
-       <button onclick="closeMonsterModal()" style="float: right; background: none; border: none; color: var(--text-secondary); font-size: 24px; cursor: pointer;">×</button>
+        <button onclick="closeMonsterModal()" style="float: right; background: none; border: none; color: var(--text-secondary); font-size: 32px; cursor: pointer; line-height: 1; padding: 5px 10px;">×</button>
        <div class="viewer-content" id="monsterModalContent"></div>
      </div>
    </div>
